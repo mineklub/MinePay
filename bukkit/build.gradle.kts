@@ -45,16 +45,38 @@ tasks {
         exclude("META-INF/*")
         minimize()
     }
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
+            groupId = "dk.minepay"
+            artifactId = "minepay-bukkit"
             version = project.rootProject.version.toString()
 
             from(components["java"])
+
+            pom {
+                name = "MinePay"
+                description = "A Bukkit plugin for MinePay"
+                url = "https://mineclub.dk"
+                inceptionYear = "2024"
+                developers {
+                    developer {
+                        id = "mineclub"
+                        name = "MineClub"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/mineklub/MinePay.git"
+                    developerConnection = "scm:git:ssh://github.com/mineklub/MinePay.git"
+                    url = "https://github.com/mineklub/MinePay"
+                }
+            }
         }
     }
 }

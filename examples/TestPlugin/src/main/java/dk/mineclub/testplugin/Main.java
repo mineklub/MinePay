@@ -1,5 +1,6 @@
 package dk.mineclub.testplugin;
 
+import dk.mineclub.testplugin.commands.TestCancelCommand;
 import dk.mineclub.testplugin.commands.TestCommand;
 import dk.mineclub.testplugin.listeners.StoreRequestListener;
 import dk.minepay.server.bukkit.MinePayApi;
@@ -12,6 +13,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         minePayApi = MinePayApi.initApi(this);
         getCommand("test").setExecutor(new TestCommand());
+        getCommand("testcancel").setExecutor(new TestCancelCommand());
         getServer().getPluginManager().registerEvents(new StoreRequestListener(), this);
     }
 

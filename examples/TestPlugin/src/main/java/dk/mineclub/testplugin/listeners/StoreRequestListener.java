@@ -13,18 +13,35 @@ public class StoreRequestListener implements Listener {
     public void onStoreRequestAccept(StoreRequestAcceptEvent event) {
         System.out.println("StoreRequestAcceptEvent");
         StringBuilder message =
-                new StringBuilder("&2[MinePay] " + event.getPlayer().getName() + " har købt: ");
+                new StringBuilder("§2[MinePay] " + event.getPlayer().getName() + " har købt: ");
+        boolean refund = false;
         for (StoreProduct product : event.getRequest().getProducts()) {
+            if (product.getId().equals("MAN417")) {
+                refund = true;
+            }
             message.append(product.getName()).append(", ");
         }
 
         message.append("for ").append(event.getRequest().getPrice()).append(" mønter.");
-        Bukkit.broadcastMessage(message.toString());
-        JsonObject jsonObject =
-                MinePayApi.getINSTANCE()
-                        .getRequestManager()
-                        .acceptRequest(event.getRequest().get_id());
-        System.out.println(jsonObject);
+        if (refund) {
+            Bukkit.getScheduler()
+                    .runTaskAsynchronously(
+                            MinePayApi.getINSTANCE().getPlugin(),
+                            () ->
+                                    MinePayApi.getINSTANCE()
+                                            .getRequestManager()
+                                            .cancelRequest(event.getRequest().get_id()));
+        } else {
+            Bukkit.broadcastMessage(message.toString());
+            Bukkit.getScheduler()
+                    .runTaskAsynchronously(
+                            MinePayApi.getINSTANCE().getPlugin(),
+                            () -> {
+                                MinePayApi.getINSTANCE()
+                                        .getRequestManager()
+                                        .acceptRequest(event.getRequest().get_id());
+                            });
+        }
     }
 
     @EventHandler
@@ -43,7 +60,7 @@ public class StoreRequestListener implements Listener {
 
     @EventHandler
     public void onStoreRequestAcceptJoin(StoreRequestAcceptJoinEvent event) {
-        StringBuilder message = new StringBuilder("Du har købt: ");
+        StringBuilder message = new StringBuilder("§2Du har købt: ");
 
         for (StoreProduct product : event.getRequest().getProducts()) {
             message.append(product.getName()).append(", ");
@@ -55,7 +72,7 @@ public class StoreRequestListener implements Listener {
 
     @EventHandler
     public void onStoreRequestCancelJoin(StoreRequestCancelJoinEvent event) {
-        StringBuilder message = new StringBuilder("Du har annulleret købet af: ");
+        StringBuilder message = new StringBuilder("§cDu har annulleret købet af: ");
 
         for (StoreProduct product : event.getRequest().getProducts()) {
             message.append(product.getName()).append(", ");

@@ -9,9 +9,17 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/** Manager class for the socket connection. */
 public class SocketManager {
     private Socket socket;
 
+    /** Constructor for the SocketManager class. */
+    public SocketManager() {}
+
+    /**
+     * Initializes the socket connection and sets up event listeners. Connects to the socket server
+     * and handles various socket events.
+     */
     public void init() {
         HashMap<String, String> auth = new HashMap<>();
         auth.put("token", MinePayApi.getINSTANCE().getToken());

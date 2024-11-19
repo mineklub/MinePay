@@ -5,6 +5,7 @@ import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Class representing a product in the store. */
 @Getter
 @Setter
 public class StoreProduct {
@@ -14,6 +15,15 @@ public class StoreProduct {
     private double quantity;
     private HashMap<String, String> metadata = null;
 
+    /**
+     * Constructor for StoreProduct with metadata.
+     *
+     * @param name the name of the product
+     * @param id the unique identifier of the product
+     * @param price the price of the product
+     * @param quantity the quantity of the product
+     * @param metadata additional metadata for the product
+     */
     public StoreProduct(
             String name,
             String id,
@@ -27,6 +37,14 @@ public class StoreProduct {
         this.metadata = metadata;
     }
 
+    /**
+     * Constructor for StoreProduct without metadata.
+     *
+     * @param name the name of the product
+     * @param id the unique identifier of the product
+     * @param price the price of the product
+     * @param quantity the quantity of the product
+     */
     public StoreProduct(String name, String id, double price, double quantity) {
         this.name = name;
         this.id = id;
@@ -34,6 +52,11 @@ public class StoreProduct {
         this.quantity = quantity;
     }
 
+    /**
+     * Converts the StoreProduct to a JSON object.
+     *
+     * @return a JsonObject representing the StoreProduct
+     */
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", name);

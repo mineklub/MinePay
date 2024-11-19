@@ -11,6 +11,10 @@ import java.util.List;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Main API class for the MinePay plugin. This class handles the initialization and management of
+ * the plugin's components.
+ */
 public class MinePayApi {
     @Getter private static MinePayApi INSTANCE;
     @Getter private JavaPlugin plugin;
@@ -18,12 +22,26 @@ public class MinePayApi {
     @Getter private RequestManager requestManager;
     @Getter private String token;
 
+    /** Constructor for the MinePayApi class. */
+    public MinePayApi() {}
+
+    /**
+     * Initializes the MinePay API with the given JavaPlugin instance.
+     *
+     * @param javaPlugin the JavaPlugin instance
+     * @return the initialized MinePayApi instance
+     */
     public static MinePayApi initApi(JavaPlugin javaPlugin) {
         MinePayApi minePayApi = new MinePayApi();
         minePayApi.init(javaPlugin);
         return minePayApi;
     }
 
+    /**
+     * Initializes the MinePayApi instance with the given JavaPlugin.
+     *
+     * @param javaPlugin the JavaPlugin instance
+     */
     public void init(JavaPlugin javaPlugin) {
         INSTANCE = this;
         this.token = System.getenv("TOKEN");
@@ -31,9 +49,10 @@ public class MinePayApi {
         this.socketManager = new SocketManager();
         this.socketManager.init();
         initRequestManager();
-        plugin.getServer().getPluginManager().registerEvents(new JoinListener(), plugin);
+        new JoinListener();
     }
 
+    /** Initializes the RequestManager and schedules a task to process requests periodically. */
     public void initRequestManager() {
         this.requestManager = new RequestManager();
         plugin.getServer()
