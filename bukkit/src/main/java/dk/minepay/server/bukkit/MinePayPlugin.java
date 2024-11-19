@@ -1,13 +1,17 @@
 package dk.minepay.server.bukkit;
 
 import dk.minepay.server.bukkit.hooks.SkriptHook;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public class MinePayPlugin extends JavaPlugin {
+    private MinePayApi minePayApi;
+
     @Override
     public void onEnable() {
-        MinePayApi.initApi(this);
+        minePayApi = MinePayApi.initApi(this);
         initSkriptHook();
     }
 

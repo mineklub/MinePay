@@ -1,0 +1,7 @@
+name: "TestPlugin"
+main: "dk.mineclub.testplugin.Main"
+api-version: "1.13"
+version: "1.0.0"
+commands:
+    test:
+        description: "Test command"

@@ -6,3 +6,10 @@ sequenceOf("bukkit").forEach {
     include(name)
     project(":${name}").projectDir = file(it)
 }
+
+sequenceOf("TestPlugin").forEach {
+    val name = "examples-$it"
+
+    include(name)
+    project(":${name}").projectDir = file("examples/$it")
+}

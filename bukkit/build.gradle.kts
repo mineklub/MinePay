@@ -19,13 +19,20 @@ dependencies {
         exclude(group = "org.yaml", module = "snakeyaml")
         exclude(group = "junit", module = "junit")
     }
-    implementation(libs.skript)
+    compileOnly(libs.skript)
     implementation(libs.socketclient) {
         exclude(group = "org.json", module = "json")
         exclude(group = "com.squareup.okio", module = "okio")
+        exclude(group = "com.squareup.okhttp3", module = "okhttp")
     }
+    implementation(libs.okhttp) {
+        exclude(group = "com.squareup.okio", module = "okio")
+    }
+    implementation(libs.okio)
+    implementation(libs.gson)
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
+    implementation(libs.json)
 }
 
 tasks {
@@ -37,8 +44,6 @@ tasks {
     withType<ShadowJar> {
         exclude("META-INF/*")
         minimize()
-        isEnableRelocation = true
-        relocationPrefix = "dk.minepay"
     }
 }
 
