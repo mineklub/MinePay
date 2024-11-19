@@ -1,8 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jreleaser.model.Active
 
 plugins {
     id("java")
     alias(libs.plugins.shadow)
+    id("maven-publish")
+    id("org.jreleaser") version "1.15.0"
 }
 
 repositories {
@@ -75,6 +78,41 @@ publishing {
                     connection = "scm:git:https://github.com/mineklub/MinePay.git"
                     developerConnection = "scm:git:ssh://github.com/mineklub/MinePay.git"
                     url = "https://github.com/mineklub/MinePay"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+        }
+    }
+}
+
+jreleaser {
+    gitRootSearch = true
+    signing {
+        active = Active.ALWAYS
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                nexus2 {
+                    create("maven-central") {
+                        active = Active.ALWAYS
+                        url = "https://s01.oss.sonatype.org/service/local"
+                        snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                        closeRepository = true
+                        releaseRepository = true
+                        stagingRepository("build/staging-deploy")
+                    }
+                }
+                create("sonatype") {
+                    active = Active.ALWAYS
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepository("target/staging-deploy")
                 }
             }
         }

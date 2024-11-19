@@ -3,7 +3,6 @@ package dk.mineclub.testplugin.commands;
 import dk.mineclub.testplugin.Main;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import java.util.HashMap;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,14 +27,11 @@ public class TestCommand implements CommandExecutor {
         Bukkit.getScheduler()
                 .runTaskAsynchronously(
                         Main.getMinePayApi().getPlugin(),
-                        () -> {
-                            Main.getMinePayApi()
-                                    .getRequestManager()
-                                    .createRequest(
-                                            player.getUniqueId(),
-                                            List.of(storeProduct, storeProduct2)
-                                                    .toArray(new StoreProduct[0]));
-                        });
+                        () ->
+                                Main.getMinePayApi()
+                                        .getRequestManager()
+                                        .createRequest(
+                                                player.getUniqueId(), storeProduct, storeProduct2));
         return true;
     }
 }

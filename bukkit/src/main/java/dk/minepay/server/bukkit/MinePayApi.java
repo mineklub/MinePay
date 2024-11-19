@@ -5,10 +5,10 @@ import dk.minepay.server.bukkit.classes.StoreRequest;
 import dk.minepay.server.bukkit.listeners.JoinListener;
 import dk.minepay.server.bukkit.managers.RequestManager;
 import dk.minepay.server.bukkit.managers.SocketManager;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -20,7 +20,7 @@ public class MinePayApi {
     @Getter private JavaPlugin plugin;
     private SocketManager socketManager;
     @Getter private RequestManager requestManager;
-    @Getter private String token;
+    @Getter @Setter private String token;
 
     /** Constructor for the MinePayApi class. */
     public MinePayApi() {}
@@ -62,23 +62,16 @@ public class MinePayApi {
                         () -> {
                             StoreRequest[] requests =
                                     requestManager.getRequests(
-                                            RequestStatus.accepted, RequestStatus.pending);
-                            StoreRequest[] requests2 =
-                                    requestManager.getRequests(
-                                            RequestStatus.cancelled, RequestStatus.pending);
-                            List<StoreRequest> requestList = new ArrayList<>();
-                            if (requests != null && requests.length > 0) {
-                                requestList.addAll(Arrays.asList(requests));
-                            }
-                            if (requests2 != null && requests2.length > 0) {
-                                requestList.addAll(Arrays.asList(requests2));
-                            }
+                                            Arrays.asList(
+                                                    RequestStatus.accepted,
+                                                    RequestStatus.cancelled),
+                                            Collections.singletonList(RequestStatus.pending));
 
-                            if (requestList.isEmpty()) {
+                            if (requests.length == 0) {
                                 return;
                             }
 
-                            for (StoreRequest request : requestList) {
+                            for (StoreRequest request : requests) {
                                 requestManager.callEvent(request);
                             }
 

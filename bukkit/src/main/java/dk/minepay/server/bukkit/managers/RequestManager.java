@@ -12,13 +12,20 @@ import dk.minepay.server.bukkit.events.StoreRequestAcceptJoinEvent;
 import dk.minepay.server.bukkit.events.StoreRequestCancelEvent;
 import dk.minepay.server.bukkit.events.StoreRequestCancelJoinEvent;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -34,6 +41,7 @@ public class RequestManager {
 
     @Getter private HashSet<String> calledIds = new HashSet<>();
     @Getter private HashMap<UUID, StoreRequest> joinRequests = new HashMap<>();
+    private final String apiUri = "https://api.mineclub.dk/v1/store/";
 
     /** Constructor for the RequestManager class. */
     public RequestManager() {}
@@ -57,9 +65,7 @@ public class RequestManager {
         jsonObject.add("products", jsonArray);
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
-        HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse("https://api.mineclub.dk/v1/store/"))
-                        .newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -95,12 +101,17 @@ public class RequestManager {
      * @param serverStatus the server status of the requests to retrieve
      * @return an array of StoreRequest objects representing the retrieved requests
      */
-    public StoreRequest[] getRequests(RequestStatus status, RequestStatus serverStatus) {
-        HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse("https://api.mineclub.dk/v1/store/"))
-                        .newBuilder()
-                        .addQueryParameter("status", status.toString())
-                        .addQueryParameter("serverStatus", serverStatus.toString());
+    public StoreRequest[] getRequests(
+            List<RequestStatus> status, List<RequestStatus> serverStatus) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+
+        for (RequestStatus requestStatus : status) {
+            urlBuilder.addQueryParameter("status", requestStatus.toString());
+        }
+
+        for (RequestStatus requestStatus : serverStatus) {
+            urlBuilder.addQueryParameter("serverStatus", requestStatus.toString());
+        }
 
         Request request =
                 new Request.Builder()
@@ -131,6 +142,44 @@ public class RequestManager {
     }
 
     /**
+     * Retrieves a store request with the given request ID.
+     *
+     * @param requestId the ID of the request to retrieve
+     * @return a StoreRequest object representing the retrieved request
+     */
+    public StoreRequest getRequest(String requestId) {
+        HttpUrl.Builder urlBuilder =
+                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId)).newBuilder();
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), StoreRequest.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * Accepts a store request with the given request ID.
      *
      * @param requestId the ID of the request to accept
@@ -143,12 +192,7 @@ public class RequestManager {
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(
-                                HttpUrl.parse(
-                                        "https://api.mineclub.dk/v1/store/"
-                                                + requestId
-                                                + "/accept"))
-                        .newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId + "/accept")).newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -190,12 +234,7 @@ public class RequestManager {
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(
-                                HttpUrl.parse(
-                                        "https://api.mineclub.dk/v1/store/"
-                                                + requestId
-                                                + "/cancel"))
-                        .newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId + "/cancel")).newBuilder();
 
         Request request =
                 new Request.Builder()
