@@ -8,7 +8,7 @@ socketclient = "2.1.1"
 lombok = "1.18.36"
 skript = "2.9.4"
 json = "20240303"
-okio = "1.17.6"
+okio = "3.9.1"
 
 [plugins]
 shadow = {id = "com.gradleup.shadow", version.ref = "shadow"}
