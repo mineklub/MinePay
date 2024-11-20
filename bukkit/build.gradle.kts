@@ -34,8 +34,6 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     implementation(libs.json)
-    implementation(project(":server-bukkit-skript-old"))
-    implementation(project(":server-bukkit-skript-new"))
 }
 
 tasks {

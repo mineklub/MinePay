@@ -15,6 +15,8 @@ public class StoreProduct {
     private double quantity;
     private HashMap<String, String> metadata = null;
 
+    public StoreProduct() {}
+
     /**
      * Constructor for StoreProduct with metadata.
      *

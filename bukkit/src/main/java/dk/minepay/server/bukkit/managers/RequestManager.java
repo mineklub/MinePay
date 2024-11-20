@@ -53,7 +53,7 @@ public class RequestManager {
      * @param storeProducts the store products to include in the request
      * @return a JsonObject representing the response from the store API
      */
-    public JsonObject createRequest(UUID uuid, StoreProduct... storeProducts) {
+    public JsonObject createRequest(UUID uuid, StoreProduct[] storeProducts) {
         RequestBody requestBody;
         MediaType mediaType = MediaType.parse("application/json");
         JsonObject jsonObject = new JsonObject();

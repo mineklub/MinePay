@@ -26,7 +26,8 @@ public class SkriptHook implements iHook {
         addon = Skript.registerAddon(MinePayApi.getINSTANCE().getPlugin());
         try {
             addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript");
-            if (addon.version.isLargerThan(new Version(2, 6)) || addon.version.equals(new Version(2, 6))) {
+            if (addon.version.isLargerThan(new Version(2, 6))
+                    || addon.version.equals(new Version(2, 6))) {
                 addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript.new");
             } else {
                 addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript.old");

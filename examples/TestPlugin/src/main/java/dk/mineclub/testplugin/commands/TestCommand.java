@@ -31,7 +31,8 @@ public class TestCommand implements CommandExecutor {
                                 Main.getMinePayApi()
                                         .getRequestManager()
                                         .createRequest(
-                                                player.getUniqueId(), storeProduct, storeProduct2));
+                                                player.getUniqueId(),
+                                                new StoreProduct[] {storeProduct, storeProduct2}));
         return true;
     }
 }

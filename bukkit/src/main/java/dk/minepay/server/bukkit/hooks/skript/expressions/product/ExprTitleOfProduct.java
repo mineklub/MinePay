@@ -6,19 +6,19 @@ import ch.njol.util.coll.CollectionUtils;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.event.Event;
 
-public class ExprIdOfProduct extends SimplePropertyExpression<StoreProduct, String> {
+public class ExprTitleOfProduct extends SimplePropertyExpression<StoreProduct, String> {
     static {
-        register(ExprIdOfProduct.class, String.class, "id", "product");
+        register(ExprTitleOfProduct.class, String.class, "title", "product");
     }
 
     @Override
     public String convert(StoreProduct request) {
-        return request.getId();
+        return request.getName();
     }
 
     @Override
     protected String getPropertyName() {
-        return "id of product";
+        return "name of product";
     }
 
     @Override
@@ -37,17 +37,17 @@ public class ExprIdOfProduct extends SimplePropertyExpression<StoreProduct, Stri
 
     @Override
     public void change(Event event, Object[] delta, Changer.ChangeMode mode) {
-        for (StoreProduct product : getExpr().getArray(event)) {
+        for (StoreProduct product : this.getExpr().getArray(event)) {
             if (product == null || delta == null) {
                 return;
             }
 
             switch (mode) {
                 case SET:
-                    product.setId((String) delta[0]);
+                    product.setName((String) delta[0]);
                     break;
                 case DELETE:
-                    product.setId(null);
+                    product.setName(null);
                     break;
                 default:
                     break;
@@ -57,6 +57,6 @@ public class ExprIdOfProduct extends SimplePropertyExpression<StoreProduct, Stri
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "id of product";
+        return "name of product";
     }
 }
