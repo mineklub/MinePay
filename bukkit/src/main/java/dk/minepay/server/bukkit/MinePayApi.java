@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * the plugin's components.
  */
 public class MinePayApi {
-    @Getter private static MinePayApi INSTANCE;
+    @Getter private static final MinePayApi INSTANCE = new MinePayApi();
     @Getter private JavaPlugin plugin;
     private SocketManager socketManager;
     @Getter private RequestManager requestManager;
@@ -32,9 +32,12 @@ public class MinePayApi {
      * @return the initialized MinePayApi instance
      */
     public static MinePayApi initApi(JavaPlugin javaPlugin) {
-        MinePayApi minePayApi = new MinePayApi();
-        minePayApi.init(javaPlugin);
-        return minePayApi;
+        MinePayApi.getINSTANCE().init(javaPlugin);
+        return MinePayApi.getINSTANCE();
+    }
+
+    public boolean isInitialized() {
+        return this.plugin != null;
     }
 
     /**
@@ -43,7 +46,11 @@ public class MinePayApi {
      * @param javaPlugin the JavaPlugin instance
      */
     public void init(JavaPlugin javaPlugin) {
-        INSTANCE = this;
+        if (isInitialized()) {
+            return;
+        }
+
+        javaPlugin.getLogger().info("Initializing MinePayApi");
         this.token = System.getenv("TOKEN");
         this.plugin = javaPlugin;
         this.socketManager = new SocketManager();

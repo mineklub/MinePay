@@ -8,9 +8,9 @@ import dk.minepay.server.bukkit.classes.RequestStatus;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import dk.minepay.server.bukkit.events.StoreRequestAcceptEvent;
-import dk.minepay.server.bukkit.events.StoreRequestAcceptJoinEvent;
+import dk.minepay.server.bukkit.events.StoreRequestAcceptOnlineEvent;
 import dk.minepay.server.bukkit.events.StoreRequestCancelEvent;
-import dk.minepay.server.bukkit.events.StoreRequestCancelJoinEvent;
+import dk.minepay.server.bukkit.events.StoreRequestCancelOnlineEvent;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -279,8 +279,11 @@ public class RequestManager {
                         .getServer()
                         .getOfflinePlayer(storeRequest.getUuid());
         calledIds.add(storeRequest.get_id());
-        System.out.println("StoreRequest: " + storeRequest.getStatus());
-        joinRequests.put(player.getUniqueId(), storeRequest);
+        if (player.isOnline()) {
+            callOnlineEvent(storeRequest);
+        } else {
+            joinRequests.put(player.getUniqueId(), storeRequest);
+        }
         if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
             StoreRequestAcceptEvent event = new StoreRequestAcceptEvent(storeRequest, player);
             MinePayApi.getINSTANCE()
@@ -321,12 +324,12 @@ public class RequestManager {
      *
      * @param storeRequest the store request for which to call the join event
      */
-    public void callJoinEvent(StoreRequest storeRequest) {
+    public void callOnlineEvent(StoreRequest storeRequest) {
         Player player =
                 MinePayApi.getINSTANCE().getPlugin().getServer().getPlayer(storeRequest.getUuid());
         if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
-            StoreRequestAcceptJoinEvent event =
-                    new StoreRequestAcceptJoinEvent(storeRequest, player);
+            StoreRequestAcceptOnlineEvent event =
+                    new StoreRequestAcceptOnlineEvent(storeRequest, player);
             MinePayApi.getINSTANCE()
                     .getPlugin()
                     .getServer()
@@ -340,8 +343,8 @@ public class RequestManager {
                                             .getPluginManager()
                                             .callEvent(event));
         } else if (storeRequest.getStatus().equals(RequestStatus.cancelled)) {
-            StoreRequestCancelJoinEvent event =
-                    new StoreRequestCancelJoinEvent(storeRequest, player);
+            StoreRequestCancelOnlineEvent event =
+                    new StoreRequestCancelOnlineEvent(storeRequest, player);
             MinePayApi.getINSTANCE()
                     .getPlugin()
                     .getServer()

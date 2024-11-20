@@ -2,3 +2,4 @@ name: "MinePay"
 main: "dk.minepay.server.bukkit.MinePayPlugin"
 api-version: "1.13"
 version: "${version}"
+softdepend: [Skript]

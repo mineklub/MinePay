@@ -2,25 +2,24 @@ package dk.minepay.server.bukkit.events;
 
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import lombok.Getter;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/** Event that is triggered when a store request is accepted. */
+/** Event that is triggered when a store request join is cancelled. */
 @Getter
-public class StoreRequestAcceptJoinEvent extends Event {
+public class StoreRequestCancelOnlineEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     private final StoreRequest request;
-    private final OfflinePlayer player;
+    private final Player player;
 
     /**
-     * Constructor for StoreRequestAcceptJoinEvent.
+     * Constructor for StoreRequestCancelJoinEvent.
      *
-     * @param request the store request that was accepted
-     * @param player the player that accepted the store request
+     * @param request the store request that was cancelled
+     * @param player the player that cancelled the store request
      */
-    public StoreRequestAcceptJoinEvent(StoreRequest request, Player player) {
+    public StoreRequestCancelOnlineEvent(StoreRequest request, Player player) {
         super(true);
         this.request = request;
         this.player = player;

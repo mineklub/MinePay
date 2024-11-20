@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 import dk.minepay.server.bukkit.MinePayApi;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import dk.minepay.server.bukkit.events.StoreRequestAcceptEvent;
-import dk.minepay.server.bukkit.events.StoreRequestAcceptJoinEvent;
+import dk.minepay.server.bukkit.events.StoreRequestAcceptOnlineEvent;
 import dk.minepay.server.bukkit.events.StoreRequestCancelEvent;
-import dk.minepay.server.bukkit.events.StoreRequestCancelJoinEvent;
+import dk.minepay.server.bukkit.events.StoreRequestCancelOnlineEvent;
 import dk.minepay.server.bukkit.events.StoreRequestEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 public class StoreRequestListener implements Listener {
     @EventHandler
     public void onStoreRequestAccept(StoreRequestAcceptEvent event) {
-        System.out.println("StoreRequestAcceptEvent");
         StringBuilder message =
                 new StringBuilder("§2[MinePay] " + event.getPlayer().getName() + " har købt: ");
         boolean refund = false;
@@ -54,7 +53,6 @@ public class StoreRequestListener implements Listener {
                 MinePayApi.getINSTANCE()
                         .getRequestManager()
                         .acceptRequest(event.getRequest().get_id());
-        System.out.println(jsonObject);
     }
 
     @EventHandler
@@ -63,7 +61,7 @@ public class StoreRequestListener implements Listener {
     }
 
     @EventHandler
-    public void onStoreRequestAcceptJoin(StoreRequestAcceptJoinEvent event) {
+    public void onStoreRequestAcceptJoin(StoreRequestAcceptOnlineEvent event) {
         StringBuilder message = new StringBuilder("§2Du har købt: ");
 
         for (StoreProduct product : event.getRequest().getProducts()) {
@@ -75,7 +73,7 @@ public class StoreRequestListener implements Listener {
     }
 
     @EventHandler
-    public void onStoreRequestCancelJoin(StoreRequestCancelJoinEvent event) {
+    public void onStoreRequestCancelJoin(StoreRequestCancelOnlineEvent event) {
         StringBuilder message = new StringBuilder("§cDu har annulleret købet af: ");
 
         for (StoreProduct product : event.getRequest().getProducts()) {

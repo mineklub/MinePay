@@ -6,20 +6,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/** Event that is triggered when a store request join is cancelled. */
+/** Event that is triggered when a store request is accepted. */
 @Getter
-public class StoreRequestCancelJoinEvent extends Event {
+public class StoreRequestAcceptOnlineEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
     private final StoreRequest request;
     private final Player player;
 
     /**
-     * Constructor for StoreRequestCancelJoinEvent.
+     * Constructor for StoreRequestAcceptJoinEvent.
      *
-     * @param request the store request that was cancelled
-     * @param player the player that cancelled the store request
+     * @param request the store request that was accepted
+     * @param player the player that accepted the store request
      */
-    public StoreRequestCancelJoinEvent(StoreRequest request, Player player) {
+    public StoreRequestAcceptOnlineEvent(StoreRequest request, Player player) {
         super(true);
         this.request = request;
         this.player = player;
