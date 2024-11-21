@@ -12,6 +12,7 @@ import dk.minepay.server.bukkit.classes.StoreProduct;
 import java.util.HashMap;
 import org.bukkit.event.Event;
 
+/** Metadata value of product expression. */
 public class ExprMetadataValueOfProduct extends SimpleExpression<String> {
     static {
         Skript.registerExpression(
@@ -20,6 +21,9 @@ public class ExprMetadataValueOfProduct extends SimpleExpression<String> {
                 ExpressionType.COMBINED,
                 "metadata-value %string% of %product%");
     }
+
+    /** Creates a new metadata value of product expression. */
+    public ExprMetadataValueOfProduct() {}
 
     private Expression<StoreProduct> product;
     private Expression<String> key;

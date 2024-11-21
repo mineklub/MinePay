@@ -11,6 +11,7 @@ import dk.minepay.server.bukkit.events.StoreRequestAcceptOnlineEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+/** The type Evt store request accept online. */
 public class EvtStoreRequestAcceptOnline extends SkriptEvent {
     static {
         Skript.registerEvent(
@@ -39,6 +40,9 @@ public class EvtStoreRequestAcceptOnline extends SkriptEvent {
                 },
                 0);
     }
+
+    /** Instantiates a new Evt store request accept online. */
+    public EvtStoreRequestAcceptOnline() {}
 
     @Override
     public boolean init(

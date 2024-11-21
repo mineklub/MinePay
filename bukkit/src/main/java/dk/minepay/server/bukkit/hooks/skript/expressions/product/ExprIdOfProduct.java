@@ -6,10 +6,14 @@ import ch.njol.util.coll.CollectionUtils;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.event.Event;
 
+/** ID of product expression. */
 public class ExprIdOfProduct extends SimplePropertyExpression<StoreProduct, String> {
     static {
         register(ExprIdOfProduct.class, String.class, "id", "product");
     }
+
+    /** Creates a new id of product expression. */
+    public ExprIdOfProduct() {}
 
     @Override
     public String convert(StoreProduct request) {

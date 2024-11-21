@@ -13,6 +13,16 @@ public class StoreRequest {
     private RequestStatus serverStatus;
     private double price;
 
+    /**
+     * Constructor for the StoreRequest class. Used by Skript to deserialize the store request.
+     *
+     * @param _id the unique identifier of the store request
+     * @param uuid the unique identifier of the store request
+     * @param products the products of the store request
+     * @param status the status of the store request
+     * @param serverStatus the server status of the store request
+     * @param price the price of the store request
+     */
     public StoreRequest(
             String _id,
             String uuid,

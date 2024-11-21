@@ -6,10 +6,14 @@ import ch.njol.util.coll.CollectionUtils;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.event.Event;
 
+/** Price of product expression. */
 public class ExprPriceOfProduct extends SimplePropertyExpression<StoreProduct, Double> {
     static {
         register(ExprPriceOfProduct.class, Double.class, "price", "product");
     }
+
+    /** Creates a new price of product expression. */
+    public ExprPriceOfProduct() {}
 
     @Override
     public Double convert(StoreProduct request) {

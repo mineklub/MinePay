@@ -36,6 +36,11 @@ public class MinePayApi {
         return MinePayApi.getINSTANCE();
     }
 
+    /**
+     * Checks if the MinePayApi instance is initialized.
+     *
+     * @return true if the instance is initialized, false otherwise
+     */
     public boolean isInitialized() {
         return this.plugin != null;
     }

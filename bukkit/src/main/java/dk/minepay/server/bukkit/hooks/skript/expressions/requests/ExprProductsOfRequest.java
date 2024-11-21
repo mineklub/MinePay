@@ -13,6 +13,7 @@ import dk.minepay.server.bukkit.events.StoreRequestCancelOnlineEvent;
 import dk.minepay.server.bukkit.events.StoreRequestEvent;
 import org.bukkit.event.Event;
 
+/** The type Expr products of request. */
 public class ExprProductsOfRequest extends SimpleExpression<StoreProduct> {
     static {
         Skript.registerExpression(
@@ -21,6 +22,9 @@ public class ExprProductsOfRequest extends SimpleExpression<StoreProduct> {
                 ExpressionType.SIMPLE,
                 "products of %request%");
     }
+
+    /** Instantiates a new Expr products of request. */
+    public ExprProductsOfRequest() {}
 
     @Override
     protected StoreProduct[] get(Event e) {

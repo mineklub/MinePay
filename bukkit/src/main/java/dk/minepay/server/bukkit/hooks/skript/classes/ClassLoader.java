@@ -14,7 +14,11 @@ import java.io.StreamCorruptedException;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/** The type Class loader. */
 public class ClassLoader {
+    /** Instantiates a new Class loader. */
+    public ClassLoader() {}
+
     static {
         Classes.registerClass(
                 new ClassInfo<>(StoreProduct.class, "product")
@@ -63,7 +67,7 @@ public class ClassLoader {
                                         return fields;
                                     }
 
-                                    @SuppressWarnings("unchecked, ConstantConditions")
+                                    @SuppressWarnings({"unchecked", "ConstantConditions"})
                                     @Override
                                     protected StoreProduct deserialize(Fields fields)
                                             throws StreamCorruptedException {

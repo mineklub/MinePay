@@ -11,6 +11,7 @@ import dk.minepay.server.bukkit.events.StoreRequestCancelOnlineEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+/** The type Evt store request cancel online. */
 public class EvtStoreRequestCancelOnline extends SkriptEvent {
     static {
         Skript.registerEvent(
@@ -39,6 +40,9 @@ public class EvtStoreRequestCancelOnline extends SkriptEvent {
                 },
                 0);
     }
+
+    /** Instantiates a new Evt store request cancel online. */
+    public EvtStoreRequestCancelOnline() {}
 
     @Override
     public boolean init(

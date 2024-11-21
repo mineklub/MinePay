@@ -10,11 +10,15 @@ import com.avaje.ebean.validation.NotNull;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.event.Event;
 
+/** The type Expr new product. */
 public class ExprNewProduct extends SimpleExpression<StoreProduct> {
     static {
         Skript.registerExpression(
                 ExprNewProduct.class, StoreProduct.class, ExpressionType.COMBINED, "new product");
     }
+
+    /** Instantiates a new Expr new product. */
+    public ExprNewProduct() {}
 
     @Override
     public @NotNull Class<? extends StoreProduct> getReturnType() {

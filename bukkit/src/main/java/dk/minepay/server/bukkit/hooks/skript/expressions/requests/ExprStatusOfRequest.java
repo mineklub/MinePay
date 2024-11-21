@@ -3,10 +3,14 @@ package dk.minepay.server.bukkit.hooks.skript.expressions.requests;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 
+/** Status of request expression. */
 public class ExprStatusOfRequest extends SimplePropertyExpression<StoreRequest, String> {
     static {
         register(ExprStatusOfRequest.class, String.class, "status", "request");
     }
+
+    /** Creates a new status of request expression. */
+    public ExprStatusOfRequest() {}
 
     @Override
     public String convert(StoreRequest request) {

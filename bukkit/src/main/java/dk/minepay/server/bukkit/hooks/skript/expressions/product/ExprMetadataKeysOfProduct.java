@@ -9,6 +9,7 @@ import ch.njol.util.Kleenean;
 import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.event.Event;
 
+/** The type Expr metadata keys of product. */
 public class ExprMetadataKeysOfProduct extends SimpleExpression<String> {
     static {
         Skript.registerExpression(
@@ -17,6 +18,9 @@ public class ExprMetadataKeysOfProduct extends SimpleExpression<String> {
                 ExpressionType.SIMPLE,
                 "metadata-keys of %product%");
     }
+
+    /** Instantiates a new Expr metadata keys of product. */
+    public ExprMetadataKeysOfProduct() {}
 
     private Expression<StoreProduct> product;
 

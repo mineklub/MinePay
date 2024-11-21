@@ -9,10 +9,14 @@ import dk.minepay.server.bukkit.MinePayApi;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import org.bukkit.event.Event;
 
+/** The type Eff cancel request. */
 public class EffCancelRequest extends Effect {
     static {
         Skript.registerEffect(EffAcceptRequest.class, "cancel request %requests%");
     }
+
+    /** Instantiates a new Eff cancel request. */
+    public EffCancelRequest() {}
 
     private Expression<StoreRequest> request;
 

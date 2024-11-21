@@ -10,10 +10,14 @@ import dk.minepay.server.bukkit.classes.StoreProduct;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+/** The type Eff send request. */
 public class EffSendRequest extends Effect {
     static {
         Skript.registerEffect(EffSendRequest.class, "send request %products% to %players%");
     }
+
+    /** Instantiates a new Eff send request. */
+    public EffSendRequest() {}
 
     private Expression<StoreProduct> product;
     private Expression<Player> player;

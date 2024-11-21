@@ -3,10 +3,14 @@ package dk.minepay.server.bukkit.hooks.skript.expressions.requests;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 
+/** ID of request expression. */
 public class ExprIdOfRequest extends SimplePropertyExpression<StoreRequest, String> {
     static {
         register(ExprIdOfRequest.class, String.class, "id", "request");
     }
+
+    /** Creates a new id of request expression. */
+    public ExprIdOfRequest() {}
 
     @Override
     public String convert(StoreRequest request) {

@@ -9,10 +9,14 @@ import dk.minepay.server.bukkit.MinePayApi;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import org.bukkit.event.Event;
 
+/** The type Eff accept request. */
 public class EffAcceptRequest extends Effect {
     static {
         Skript.registerEffect(EffAcceptRequest.class, "accept request %requests%");
     }
+
+    /** Instantiates a new Eff accept request. */
+    public EffAcceptRequest() {}
 
     private Expression<StoreRequest> request;
 

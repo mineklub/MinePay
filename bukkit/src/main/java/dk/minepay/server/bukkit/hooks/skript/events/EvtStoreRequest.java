@@ -11,6 +11,7 @@ import dk.minepay.server.bukkit.events.StoreRequestEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 
+/** The type Evt store request. */
 public class EvtStoreRequest extends SkriptEvent {
     static {
         Skript.registerEvent(
@@ -36,6 +37,9 @@ public class EvtStoreRequest extends SkriptEvent {
                 },
                 0);
     }
+
+    /** Instantiates a new Evt store request. */
+    public EvtStoreRequest() {}
 
     @Override
     public boolean init(
