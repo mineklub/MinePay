@@ -141,6 +141,12 @@ public class RequestManager {
         }
     }
 
+    /**
+     * Retrieves store requests with the given status.
+     *
+     * @param status the status of the requests to retrieve
+     * @return an array of StoreRequest objects representing the retrieved requests
+     */
     public StoreRequest[] getRequests(List<RequestStatus> status) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
 
@@ -176,6 +182,11 @@ public class RequestManager {
         }
     }
 
+    /**
+     * Retrieves all store requests.
+     *
+     * @return an array of StoreRequest objects representing the retrieved requests
+     */
     public StoreRequest[] getRequests() {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
 
@@ -207,6 +218,12 @@ public class RequestManager {
         }
     }
 
+    /**
+     * Retrieves store requests with the given server status.
+     *
+     * @param requestStatuses the server status of the requests to retrieve
+     * @return an array of StoreRequest objects representing the retrieved requests
+     */
     public StoreRequest[] getRequestsWithServerStatus(List<RequestStatus> requestStatuses) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
 

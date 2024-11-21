@@ -9,6 +9,12 @@ public enum RequestStatus {
     /** The request has been accepted. */
     accepted;
 
+    /**
+     * Converts a string to a request status.
+     *
+     * @param status the string to convert
+     * @return the request status
+     */
     public static RequestStatus fromString(String status) {
         switch (status) {
             case "pending":
