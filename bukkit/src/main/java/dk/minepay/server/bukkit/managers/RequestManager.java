@@ -141,6 +141,107 @@ public class RequestManager {
         }
     }
 
+    public StoreRequest[] getRequests(List<RequestStatus> status) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+
+        for (RequestStatus requestStatus : status) {
+            urlBuilder.addQueryParameter("status", requestStatus.toString());
+        }
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public StoreRequest[] getRequests() {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public StoreRequest[] getRequestsWithServerStatus(List<RequestStatus> requestStatuses) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+
+        for (RequestStatus requestStatus : requestStatuses) {
+            urlBuilder.addQueryParameter("serverStatus", requestStatus.toString());
+        }
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     /**
      * Retrieves a store request with the given request ID.
      *

@@ -7,5 +7,18 @@ public enum RequestStatus {
     /** The request has been cancelled. */
     cancelled,
     /** The request has been accepted. */
-    accepted,
+    accepted;
+
+    public static RequestStatus fromString(String status) {
+        switch (status) {
+            case "pending":
+                return pending;
+            case "cancelled":
+                return cancelled;
+            case "accepted":
+                return accepted;
+            default:
+                return null;
+        }
+    }
 }

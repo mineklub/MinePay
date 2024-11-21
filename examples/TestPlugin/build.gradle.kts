@@ -11,6 +11,12 @@ version = "1.0.0"
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven {
+        url = uri("https://jitpack.io")
+        credentials {
+            username = "${properties["authToken"]}"
+        }
+    }
 }
 
 tasks {
@@ -28,6 +34,6 @@ dependencies {
         exclude(group = "org.yaml", module = "snakeyaml")
         exclude(group = "junit", module = "junit")
     }
-    implementation(project(":server-bukkit"))
     implementation(libs.gson)
+    implementation("com.github.mineklub:MinePay:11b81bf715")
 }
