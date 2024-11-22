@@ -5,14 +5,12 @@ import dk.minepay.server.bukkit.classes.StoreRequest;
 import dk.minepay.server.bukkit.listeners.JoinListener;
 import dk.minepay.server.bukkit.managers.RequestManager;
 import dk.minepay.server.bukkit.managers.SocketManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -108,7 +106,9 @@ public class MinePayApi {
         File joinRequests = new File(MinepayAPI, "joinRequests.yml");
         YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(joinRequests);
         for (String key : yamlConfiguration.getKeys(false)) {
-            this.joinRequests.put(UUID.fromString(key), requestManager.getRequest(yamlConfiguration.getString(key)));
+            this.joinRequests.put(
+                    UUID.fromString(key),
+                    requestManager.getRequest(yamlConfiguration.getString(key)));
         }
     }
 
@@ -152,6 +152,10 @@ public class MinePayApi {
     }
 
     public static void runAsync(Runnable runnable) {
-        MinePayApi.getINSTANCE().getPlugin().getServer().getScheduler().runTaskAsynchronously(MinePayApi.getINSTANCE().getPlugin(), runnable);
+        MinePayApi.getINSTANCE()
+                .getPlugin()
+                .getServer()
+                .getScheduler()
+                .runTaskAsynchronously(MinePayApi.getINSTANCE().getPlugin(), runnable);
     }
 }

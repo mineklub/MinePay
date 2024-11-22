@@ -26,10 +26,14 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         RequestManager requestManager = MinePayApi.getINSTANCE().getRequestManager();
-        if (requestManager.getJoinRequests().containsKey(event.getPlayer().getUniqueId())) {
+        if (MinePayApi.getINSTANCE()
+                .getJoinRequests()
+                .containsKey(event.getPlayer().getUniqueId())) {
             requestManager.callOnlineEvent(
-                    requestManager.getJoinRequests().get(event.getPlayer().getUniqueId()));
-            requestManager.getJoinRequests().remove(event.getPlayer().getUniqueId());
+                    MinePayApi.getINSTANCE()
+                            .getJoinRequests()
+                            .get(event.getPlayer().getUniqueId()));
+            MinePayApi.getINSTANCE().getJoinRequests().remove(event.getPlayer().getUniqueId());
         }
     }
 }

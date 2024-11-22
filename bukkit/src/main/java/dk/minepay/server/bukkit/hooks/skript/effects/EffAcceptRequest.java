@@ -24,9 +24,12 @@ public class EffAcceptRequest extends Effect {
     protected void execute(Event event) {
         StoreRequest[] requests = request.getAll(event);
         for (StoreRequest request : requests) {
-            MinePayApi.runAsync(() -> {
-                MinePayApi.getINSTANCE().getRequestManager().acceptRequest(request.get_id());
-            });
+            MinePayApi.runAsync(
+                    () -> {
+                        MinePayApi.getINSTANCE()
+                                .getRequestManager()
+                                .acceptRequest(request.get_id());
+                    });
         }
     }
 
