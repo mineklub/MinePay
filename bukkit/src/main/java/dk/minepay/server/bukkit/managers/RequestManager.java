@@ -40,7 +40,6 @@ public class RequestManager {
                     .build();
 
     @Getter private HashSet<String> calledIds = new HashSet<>();
-    @Getter private HashMap<UUID, StoreRequest> joinRequests = new HashMap<>();
     private final String apiUri = "https://api.mineclub.dk/v1/store/";
 
     /** Constructor for the RequestManager class. */
@@ -400,7 +399,7 @@ public class RequestManager {
         if (player.isOnline()) {
             callOnlineEvent(storeRequest);
         } else {
-            joinRequests.put(player.getUniqueId(), storeRequest);
+            MinePayApi.getINSTANCE().getJoinRequests().put(player.getUniqueId(), storeRequest);
         }
         if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
             StoreRequestAcceptEvent event = new StoreRequestAcceptEvent(storeRequest, player);
@@ -477,6 +476,6 @@ public class RequestManager {
                                             .callEvent(event));
         }
 
-        joinRequests.remove(player.getUniqueId());
+        MinePayApi.getINSTANCE().getJoinRequests().remove(player.getUniqueId());
     }
 }

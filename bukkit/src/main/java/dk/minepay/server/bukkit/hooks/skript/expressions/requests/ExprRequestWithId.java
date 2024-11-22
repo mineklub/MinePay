@@ -31,10 +31,12 @@ public class ExprRequestWithId extends SimpleExpression<StoreRequest> {
     protected StoreRequest[] get(Event event) {
         List<StoreRequest> requests = new ArrayList<>();
         for (String s : requestId.getAll(event)) {
-            StoreRequest request = MinePayApi.getINSTANCE().getRequestManager().getRequest(s);
-            if (request != null) {
-                requests.add(request);
-            }
+            MinePayApi.runAsync(() -> {
+                StoreRequest request = MinePayApi.getINSTANCE().getRequestManager().getRequest(s);
+                if (request != null) {
+                    requests.add(request);
+                }
+            });
         }
 
         return requests.toArray(new StoreRequest[0]);

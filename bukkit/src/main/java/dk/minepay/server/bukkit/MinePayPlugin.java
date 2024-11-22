@@ -32,4 +32,9 @@ public class MinePayPlugin extends JavaPlugin {
             new SkriptHook().init();
         }
     }
+
+    @Override
+    public void onDisable() {
+        minePayApi.disable();
+    }
 }

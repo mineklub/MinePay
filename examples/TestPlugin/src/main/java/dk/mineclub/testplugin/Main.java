@@ -17,6 +17,11 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StoreRequestListener(), this);
     }
 
+    @Override
+    public void onDisable() {
+        minePayApi.disable();
+    }
+
     public static MinePayApi getMinePayApi() {
         return minePayApi;
     }

@@ -28,9 +28,10 @@ public class EffSendRequest extends Effect {
         Player[] players = player.getAll(event);
 
         for (Player player1 : players) {
-            MinePayApi.getINSTANCE()
-                    .getRequestManager()
-                    .createRequest(player1.getUniqueId(), storeProducts);
+            MinePayApi.runAsync(() -> {MinePayApi.getINSTANCE()
+                .getRequestManager()
+                .createRequest(player1.getUniqueId(), storeProducts);
+            });
         }
     }
 

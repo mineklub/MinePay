@@ -5,13 +5,15 @@ import dk.minepay.server.bukkit.MinePayApi;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import lombok.Getter;
+
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 
 /** Manager class for the socket connection. */
 public class SocketManager {
-    private Socket socket;
+    @Getter private Socket socket;
 
     /** Constructor for the SocketManager class. */
     public SocketManager() {}

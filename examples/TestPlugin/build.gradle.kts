@@ -35,5 +35,5 @@ dependencies {
         exclude(group = "junit", module = "junit")
     }
     implementation(libs.gson)
-    implementation("com.github.mineklub:MinePay:11b81bf715")
+    implementation(project(":server-bukkit"))
 }

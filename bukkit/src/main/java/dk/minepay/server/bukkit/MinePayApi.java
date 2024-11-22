@@ -5,10 +5,17 @@ import dk.minepay.server.bukkit.classes.StoreRequest;
 import dk.minepay.server.bukkit.listeners.JoinListener;
 import dk.minepay.server.bukkit.managers.RequestManager;
 import dk.minepay.server.bukkit.managers.SocketManager;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -21,6 +28,7 @@ public class MinePayApi {
     private SocketManager socketManager;
     @Getter private RequestManager requestManager;
     @Getter @Setter private String token;
+    @Getter private HashMap<UUID, StoreRequest> joinRequests = new HashMap<>();
 
     /** Constructor for the MinePayApi class. */
     public MinePayApi() {}
@@ -60,8 +68,58 @@ public class MinePayApi {
         this.plugin = javaPlugin;
         this.socketManager = new SocketManager();
         this.socketManager.init();
-        initRequestManager();
         new JoinListener();
+        initRequestManager();
+        checkFolders();
+        loadJoinRequests();
+    }
+
+    public void checkFolders() {
+        File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
+        if (!MinepayAPI.exists()) {
+            MinepayAPI.mkdir();
+        }
+        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
+        if (!joinRequests.exists()) {
+            try {
+                joinRequests.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void saveJoinRequests() {
+        File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
+        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
+        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(joinRequests);
+        for (UUID uuid : this.joinRequests.keySet()) {
+            yamlConfiguration.set(uuid.toString(), this.joinRequests.get(uuid).get_id());
+        }
+        try {
+            yamlConfiguration.save(joinRequests);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadJoinRequests() {
+        File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
+        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
+        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(joinRequests);
+        for (String key : yamlConfiguration.getKeys(false)) {
+            this.joinRequests.put(UUID.fromString(key), requestManager.getRequest(yamlConfiguration.getString(key)));
+        }
+    }
+
+    public void disable() {
+        if (this.socketManager != null) {
+            this.socketManager.getSocket().close();
+        }
+        if (this.joinRequests != null && !this.joinRequests.isEmpty()) {
+            checkFolders();
+            saveJoinRequests();
+        }
     }
 
     /** Initializes the RequestManager and schedules a task to process requests periodically. */
@@ -91,5 +149,9 @@ public class MinePayApi {
                         },
                         20L,
                         600L);
+    }
+
+    public static void runAsync(Runnable runnable) {
+        MinePayApi.getINSTANCE().getPlugin().getServer().getScheduler().runTaskAsynchronously(MinePayApi.getINSTANCE().getPlugin(), runnable);
     }
 }
