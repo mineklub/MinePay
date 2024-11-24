@@ -13,9 +13,6 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven {
         url = uri("https://jitpack.io")
-        credentials {
-            username = "${properties["authToken"]}"
-        }
     }
 }
 

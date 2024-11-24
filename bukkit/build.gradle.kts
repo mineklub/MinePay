@@ -62,7 +62,7 @@ publishing {
             from(components["java"])
 
             pom {
-                name = "MinePay"
+                name = "MinePay-Bukkit"
                 description = "A Bukkit plugin for MinePay"
                 url = "https://mineclub.dk"
                 inceptionYear = "2024"
