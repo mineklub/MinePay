@@ -85,139 +85,19 @@ public class RequestManager {
     }
 
     /**
-     * Retrieves store requests with the given status and server status.
+     * Retrieves store requests with the given request statuses.
      *
-     * @param status the status of the requests to retrieve
-     * @param serverStatus the server status of the requests to retrieve
+     * @param body the request body containing the request statuses
      * @return an array of StoreRequest objects representing the retrieved requests
      */
-    public StoreRequest[] getRequests(
-            List<RequestStatus> status, List<RequestStatus> serverStatus) {
+    public StoreRequest[] getRequests(dk.minepay.server.bukkit.classes.RequestBody body) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
-        for (RequestStatus requestStatus : status) {
+        for (RequestStatus requestStatus : body.getStatuses()) {
             urlBuilder.addQueryParameter("status", requestStatus.toString());
         }
 
-        for (RequestStatus requestStatus : serverStatus) {
-            urlBuilder.addQueryParameter("serverStatus", requestStatus.toString());
-        }
-
-        Request request =
-                new Request.Builder()
-                        .url(urlBuilder.build())
-                        .method("GET", null)
-                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
-                        .build();
-
-        Response response;
-        // Execute the request and retrieve the response in thread-safe manner
-        try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Callable<Response> callable = () -> client.newCall(request).execute();
-
-            Future<Response> future = executor.submit(callable);
-            response = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return null;
-        }
-
-        try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Retrieves store requests with the given status.
-     *
-     * @param status the status of the requests to retrieve
-     * @return an array of StoreRequest objects representing the retrieved requests
-     */
-    public StoreRequest[] getRequests(List<RequestStatus> status) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
-
-        for (RequestStatus requestStatus : status) {
-            urlBuilder.addQueryParameter("status", requestStatus.toString());
-        }
-
-        Request request =
-                new Request.Builder()
-                        .url(urlBuilder.build())
-                        .method("GET", null)
-                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
-                        .build();
-
-        Response response;
-        // Execute the request and retrieve the response in thread-safe manner
-        try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Callable<Response> callable = () -> client.newCall(request).execute();
-
-            Future<Response> future = executor.submit(callable);
-            response = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return null;
-        }
-
-        try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Retrieves all store requests.
-     *
-     * @return an array of StoreRequest objects representing the retrieved requests
-     */
-    public StoreRequest[] getRequests() {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
-
-        Request request =
-                new Request.Builder()
-                        .url(urlBuilder.build())
-                        .method("GET", null)
-                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
-                        .build();
-
-        Response response;
-        // Execute the request and retrieve the response in thread-safe manner
-        try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Callable<Response> callable = () -> client.newCall(request).execute();
-
-            Future<Response> future = executor.submit(callable);
-            response = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return null;
-        }
-
-        try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Retrieves store requests with the given server status.
-     *
-     * @param requestStatuses the server status of the requests to retrieve
-     * @return an array of StoreRequest objects representing the retrieved requests
-     */
-    public StoreRequest[] getRequestsWithServerStatus(List<RequestStatus> requestStatuses) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
-
-        for (RequestStatus requestStatus : requestStatuses) {
+        for (RequestStatus requestStatus : body.getServerStatuses()) {
             urlBuilder.addQueryParameter("serverStatus", requestStatus.toString());
         }
 
@@ -376,51 +256,19 @@ public class RequestManager {
     /**
      * Retrieves votes with the given vote statuses.
      *
-     * @param voteStatuses the vote statuses of the votes to retrieve
+     * @param body the vote body containing the vote statuses
      * @return an array of Vote objects representing the retrieved votes
      */
-    public Vote[] getVotes(List<VoteStatus> voteStatuses) {
+    public Vote[] getVotes(VoteBody body) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(voteUrl)).newBuilder();
 
-        for (VoteStatus voteStatus : voteStatuses) {
+        for (VoteStatus voteStatus : body.getStatuses()) {
             urlBuilder.addQueryParameter("status", voteStatus.toString());
         }
 
-        Request request =
-                new Request.Builder()
-                        .url(urlBuilder.build())
-                        .method("GET", null)
-                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
-                        .build();
-
-        Response response;
-        // Execute the request and retrieve the response in thread-safe manner
-        try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Callable<Response> callable = () -> client.newCall(request).execute();
-
-            Future<Response> future = executor.submit(callable);
-            response = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return null;
+        if (body.getMcaccount() != null) {
+            urlBuilder.addQueryParameter("mcaccount", body.getMcaccount().toString());
         }
-
-        try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Retrieves votes
-     *
-     * @return an array of Vote objects representing the retrieved votes
-     */
-    public Vote[] getVotes() {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(voteUrl)).newBuilder();
 
         Request request =
                 new Request.Builder()

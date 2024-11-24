@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import dk.minepay.server.bukkit.MinePayApi;
+import dk.minepay.server.bukkit.classes.RequestBody;
 import dk.minepay.server.bukkit.classes.RequestStatus;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import java.util.ArrayList;
@@ -49,22 +50,14 @@ public class ExprRequestsWithStatus extends SimpleExpression<StoreRequest> {
             }
         }
 
+        RequestBody requestBody =
+                RequestBody.builder().statuses(statuses).serverStatuses(serverStatuses).build();
+
         if (serverStatuses.isEmpty() && statuses.isEmpty()) {
             return new StoreRequest[0];
-        } else if (serverStatuses.isEmpty()) {
-            return Arrays.stream(MinePayApi.getINSTANCE().getRequestManager().getRequests(statuses))
-                    .toArray(StoreRequest[]::new);
-        } else if (statuses.isEmpty()) {
-            return Arrays.stream(
-                            MinePayApi.getINSTANCE()
-                                    .getRequestManager()
-                                    .getRequestsWithServerStatus(serverStatuses))
-                    .toArray(StoreRequest[]::new);
         } else {
             return Arrays.stream(
-                            MinePayApi.getINSTANCE()
-                                    .getRequestManager()
-                                    .getRequests(statuses, serverStatuses))
+                            MinePayApi.getINSTANCE().getRequestManager().getRequests(requestBody))
                     .toArray(StoreRequest[]::new);
         }
     }

@@ -1,9 +1,6 @@
 package dk.minepay.server.bukkit;
 
-import dk.minepay.server.bukkit.classes.RequestStatus;
-import dk.minepay.server.bukkit.classes.StoreRequest;
-import dk.minepay.server.bukkit.classes.Vote;
-import dk.minepay.server.bukkit.classes.VoteStatus;
+import dk.minepay.server.bukkit.classes.*;
 import dk.minepay.server.bukkit.listeners.JoinListener;
 import dk.minepay.server.bukkit.managers.EventManager;
 import dk.minepay.server.bukkit.managers.RequestManager;
@@ -146,10 +143,15 @@ public class MinePayApi {
                         () -> {
                             StoreRequest[] requests =
                                     requestManager.getRequests(
-                                            Arrays.asList(
-                                                    RequestStatus.accepted,
-                                                    RequestStatus.cancelled),
-                                            Collections.singletonList(RequestStatus.pending));
+                                            RequestBody.builder()
+                                                    .statuses(
+                                                            Arrays.asList(
+                                                                    RequestStatus.accepted,
+                                                                    RequestStatus.cancelled))
+                                                    .serverStatuses(
+                                                            Collections.singletonList(
+                                                                    RequestStatus.pending))
+                                                    .build());
 
                             if (requests.length == 0) {
                                 return;
@@ -170,7 +172,11 @@ public class MinePayApi {
                         () -> {
                             Vote[] votes =
                                     requestManager.getVotes(
-                                            Collections.singletonList(VoteStatus.pending));
+                                            VoteBody.builder()
+                                                    .statuses(
+                                                            Collections.singletonList(
+                                                                    VoteStatus.pending))
+                                                    .build());
 
                             if (votes.length == 0) {
                                 return;
