@@ -6,43 +6,39 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
-import dk.minepay.server.bukkit.classes.StoreRequest;
-import dk.minepay.server.bukkit.events.StoreRequestAcceptEvent;
+import dk.minepay.server.bukkit.classes.Vote;
+import dk.minepay.server.bukkit.events.VoteEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 
-/** The type Evt store request accept. */
-public class EvtStoreRequestAccept extends SkriptEvent {
+/** The type Evt vote. */
+public class EvtVote extends SkriptEvent {
     static {
-        Skript.registerEvent(
-                "Store Request Accept",
-                EvtStoreRequestAccept.class,
-                StoreRequestAcceptEvent.class,
-                "[mineclub] store request accept");
+        Skript.registerEvent("vote", EvtVote.class, VoteEvent.class, "[mineclub] vote");
         EventValues.registerEventValue(
-                StoreRequestAcceptEvent.class,
+                VoteEvent.class,
                 OfflinePlayer.class,
-                new Getter<OfflinePlayer, StoreRequestAcceptEvent>() {
+                new Getter<OfflinePlayer, VoteEvent>() {
                     @Override
-                    public OfflinePlayer get(StoreRequestAcceptEvent event) {
+                    public OfflinePlayer get(VoteEvent event) {
                         return event.getPlayer();
                     }
                 },
                 0);
         EventValues.registerEventValue(
-                StoreRequestAcceptEvent.class,
-                StoreRequest.class,
-                new Getter<StoreRequest, StoreRequestAcceptEvent>() {
+                VoteEvent.class,
+                Vote.class,
+                new Getter<Vote, VoteEvent>() {
                     @Override
-                    public StoreRequest get(StoreRequestAcceptEvent event) {
-                        return event.getRequest();
+                    public Vote get(VoteEvent event) {
+                        return event.getVote();
                     }
                 },
                 0);
     }
 
     /** Instantiates a new Evt store request accept. */
-    public EvtStoreRequestAccept() {}
+    public EvtVote() {}
 
     @Override
     public boolean init(
@@ -52,7 +48,7 @@ public class EvtStoreRequestAccept extends SkriptEvent {
 
     @Override
     public boolean check(Event event) {
-        return event instanceof StoreRequestAcceptEvent;
+        return event instanceof VoteEvent;
     }
 
     @Override

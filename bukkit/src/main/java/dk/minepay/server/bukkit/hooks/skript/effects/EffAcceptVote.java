@@ -6,36 +6,34 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import dk.minepay.server.bukkit.MinePayApi;
-import dk.minepay.server.bukkit.classes.StoreRequest;
+import dk.minepay.server.bukkit.classes.Vote;
 import org.bukkit.event.Event;
 
-/** The type Eff accept request. */
-public class EffAcceptRequest extends Effect {
+/** The type Eff accept vote. */
+public class EffAcceptVote extends Effect {
     static {
-        Skript.registerEffect(EffAcceptRequest.class, "[mineclub] accept request %requests%");
+        Skript.registerEffect(EffAcceptVote.class, "[mineclub] accept vote %votes%");
     }
 
     /** Instantiates a new Eff accept request. */
-    public EffAcceptRequest() {}
+    public EffAcceptVote() {}
 
-    private Expression<StoreRequest> request;
+    private Expression<Vote> vote;
 
     @Override
     protected void execute(Event event) {
-        StoreRequest[] requests = request.getAll(event);
-        for (StoreRequest request : requests) {
+        Vote[] votes = vote.getAll(event);
+        for (Vote vote1 : votes) {
             MinePayApi.runAsync(
                     () -> {
-                        MinePayApi.getINSTANCE()
-                                .getRequestManager()
-                                .acceptRequest(request.get_id());
+                        MinePayApi.getINSTANCE().getRequestManager().acceptVote(vote1.get_id());
                     });
         }
     }
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "accept request %requests%";
+        return "accept vote %votes%";
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +43,7 @@ public class EffAcceptRequest extends Effect {
             int matchedPattern,
             Kleenean isDelayed,
             SkriptParser.ParseResult parseResult) {
-        request = (Expression<StoreRequest>) expressions[0];
+        vote = (Expression<Vote>) expressions[0];
         return true;
     }
 }

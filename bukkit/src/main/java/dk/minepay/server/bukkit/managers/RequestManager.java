@@ -4,13 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dk.minepay.server.bukkit.MinePayApi;
-import dk.minepay.server.bukkit.classes.RequestStatus;
-import dk.minepay.server.bukkit.classes.StoreProduct;
-import dk.minepay.server.bukkit.classes.StoreRequest;
-import dk.minepay.server.bukkit.events.StoreRequestAcceptEvent;
-import dk.minepay.server.bukkit.events.StoreRequestAcceptOnlineEvent;
-import dk.minepay.server.bukkit.events.StoreRequestCancelEvent;
-import dk.minepay.server.bukkit.events.StoreRequestCancelOnlineEvent;
+import dk.minepay.server.bukkit.classes.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -26,8 +20,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 /** Manager class for handling store requests. */
 @Getter
@@ -38,9 +30,8 @@ public class RequestManager {
                     .readTimeout(1, TimeUnit.MINUTES)
                     .writeTimeout(1, TimeUnit.MINUTES)
                     .build();
-
-    @Getter private HashSet<String> calledIds = new HashSet<>();
-    private final String apiUri = "https://api.mineclub.dk/v1/store/";
+    private final String requestUrl = "https://api.mineclub.dk/v1/plugin/request/";
+    private final String voteUrl = "https://api.mineclub.dk/v1/plugin/vote/";
 
     /** Constructor for the RequestManager class. */
     public RequestManager() {}
@@ -64,7 +55,7 @@ public class RequestManager {
         jsonObject.add("products", jsonArray);
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -102,7 +93,7 @@ public class RequestManager {
      */
     public StoreRequest[] getRequests(
             List<RequestStatus> status, List<RequestStatus> serverStatus) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
         for (RequestStatus requestStatus : status) {
             urlBuilder.addQueryParameter("status", requestStatus.toString());
@@ -147,7 +138,7 @@ public class RequestManager {
      * @return an array of StoreRequest objects representing the retrieved requests
      */
     public StoreRequest[] getRequests(List<RequestStatus> status) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
         for (RequestStatus requestStatus : status) {
             urlBuilder.addQueryParameter("status", requestStatus.toString());
@@ -187,7 +178,7 @@ public class RequestManager {
      * @return an array of StoreRequest objects representing the retrieved requests
      */
     public StoreRequest[] getRequests() {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -224,7 +215,7 @@ public class RequestManager {
      * @return an array of StoreRequest objects representing the retrieved requests
      */
     public StoreRequest[] getRequestsWithServerStatus(List<RequestStatus> requestStatuses) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(apiUri)).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(requestUrl)).newBuilder();
 
         for (RequestStatus requestStatus : requestStatuses) {
             urlBuilder.addQueryParameter("serverStatus", requestStatus.toString());
@@ -266,7 +257,7 @@ public class RequestManager {
      */
     public StoreRequest getRequest(String requestId) {
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId)).newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(requestUrl + requestId)).newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -309,7 +300,8 @@ public class RequestManager {
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId + "/accept")).newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(requestUrl + requestId + "/accept"))
+                        .newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -351,7 +343,8 @@ public class RequestManager {
         requestBody = RequestBody.create(mediaType, jsonObject.toString());
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse(apiUri + requestId + "/cancel")).newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(requestUrl + requestId + "/cancel"))
+                        .newBuilder();
 
         Request request =
                 new Request.Builder()
@@ -381,101 +374,159 @@ public class RequestManager {
     }
 
     /**
-     * Calls the appropriate event for the given store request.
+     * Retrieves votes with the given vote statuses.
      *
-     * @param storeRequest the store request for which to call the event
+     * @param voteStatuses the vote statuses of the votes to retrieve
+     * @return an array of Vote objects representing the retrieved votes
      */
-    public void callEvent(StoreRequest storeRequest) {
-        if (calledIds.contains(storeRequest.get_id())) {
-            return;
+    public Vote[] getVotes(List<VoteStatus> voteStatuses) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(voteUrl)).newBuilder();
+
+        for (VoteStatus voteStatus : voteStatuses) {
+            urlBuilder.addQueryParameter("status", voteStatus.toString());
         }
 
-        OfflinePlayer player =
-                MinePayApi.getINSTANCE()
-                        .getPlugin()
-                        .getServer()
-                        .getOfflinePlayer(storeRequest.getUuid());
-        calledIds.add(storeRequest.get_id());
-        if (player.isOnline()) {
-            callOnlineEvent(storeRequest);
-        } else {
-            MinePayApi.getINSTANCE().getJoinRequests().put(player.getUniqueId(), storeRequest);
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
         }
-        if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
-            StoreRequestAcceptEvent event = new StoreRequestAcceptEvent(storeRequest, player);
-            MinePayApi.getINSTANCE()
-                    .getPlugin()
-                    .getServer()
-                    .getScheduler()
-                    .runTaskAsynchronously(
-                            MinePayApi.getINSTANCE().getPlugin(),
-                            () -> {
-                                MinePayApi.getINSTANCE()
-                                        .getPlugin()
-                                        .getServer()
-                                        .getPluginManager()
-                                        .callEvent(event);
-                                calledIds.remove(storeRequest.get_id());
-                            });
-        } else if (storeRequest.getStatus().equals(RequestStatus.cancelled)) {
-            StoreRequestCancelEvent event = new StoreRequestCancelEvent(storeRequest, player);
-            MinePayApi.getINSTANCE()
-                    .getPlugin()
-                    .getServer()
-                    .getScheduler()
-                    .runTaskAsynchronously(
-                            MinePayApi.getINSTANCE().getPlugin(),
-                            () -> {
-                                MinePayApi.getINSTANCE()
-                                        .getPlugin()
-                                        .getServer()
-                                        .getPluginManager()
-                                        .callEvent(event);
-                                calledIds.remove(storeRequest.get_id());
-                            });
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
+        } catch (IOException e) {
+            return null;
         }
     }
 
     /**
-     * Calls the appropriate join event for the given store request.
+     * Retrieves votes
      *
-     * @param storeRequest the store request for which to call the join event
+     * @return an array of Vote objects representing the retrieved votes
      */
-    public void callOnlineEvent(StoreRequest storeRequest) {
-        Player player =
-                MinePayApi.getINSTANCE().getPlugin().getServer().getPlayer(storeRequest.getUuid());
-        if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
-            StoreRequestAcceptOnlineEvent event =
-                    new StoreRequestAcceptOnlineEvent(storeRequest, player);
-            MinePayApi.getINSTANCE()
-                    .getPlugin()
-                    .getServer()
-                    .getScheduler()
-                    .runTaskAsynchronously(
-                            MinePayApi.getINSTANCE().getPlugin(),
-                            () ->
-                                    MinePayApi.getINSTANCE()
-                                            .getPlugin()
-                                            .getServer()
-                                            .getPluginManager()
-                                            .callEvent(event));
-        } else if (storeRequest.getStatus().equals(RequestStatus.cancelled)) {
-            StoreRequestCancelOnlineEvent event =
-                    new StoreRequestCancelOnlineEvent(storeRequest, player);
-            MinePayApi.getINSTANCE()
-                    .getPlugin()
-                    .getServer()
-                    .getScheduler()
-                    .runTaskAsynchronously(
-                            MinePayApi.getINSTANCE().getPlugin(),
-                            () ->
-                                    MinePayApi.getINSTANCE()
-                                            .getPlugin()
-                                            .getServer()
-                                            .getPluginManager()
-                                            .callEvent(event));
+    public Vote[] getVotes() {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(voteUrl)).newBuilder();
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
         }
 
-        MinePayApi.getINSTANCE().getJoinRequests().remove(player.getUniqueId());
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves a vote with the given vote ID.
+     *
+     * @param voteId the ID of the vote to retrieve
+     * @return a Vote object representing the retrieved vote
+     */
+    public Vote getVote(String voteId) {
+        HttpUrl.Builder urlBuilder =
+                Objects.requireNonNull(HttpUrl.parse(voteUrl + voteId)).newBuilder();
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("GET", null)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            return new Gson().fromJson(jsonObject.get("data"), Vote.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Accepts a vote with the given vote ID.
+     *
+     * @param voteId the ID of the vote to accept
+     * @return a JsonObject representing the response from the vote API
+     */
+    public JsonObject acceptVote(String voteId) {
+        RequestBody requestBody;
+        MediaType mediaType = MediaType.parse("application/json");
+        JsonObject jsonObject = new JsonObject();
+        requestBody = RequestBody.create(mediaType, jsonObject.toString());
+
+        HttpUrl.Builder urlBuilder =
+                Objects.requireNonNull(HttpUrl.parse(voteUrl + voteId + "/accept")).newBuilder();
+
+        Request request =
+                new Request.Builder()
+                        .url(urlBuilder.build())
+                        .method("POST", requestBody)
+                        .header("Authorization", "Bearer " + MinePayApi.getINSTANCE().getToken())
+                        .build();
+
+        Response response;
+        // Execute the request and retrieve the response in thread-safe manner
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Callable<Response> callable = () -> client.newCall(request).execute();
+
+            Future<Response> future = executor.submit(callable);
+            response = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+
+        try {
+            assert response.body() != null;
+            return new Gson().fromJson(response.body().string(), JsonObject.class);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

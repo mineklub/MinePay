@@ -2,15 +2,15 @@ package dk.minepay.server.bukkit;
 
 import dk.minepay.server.bukkit.classes.RequestStatus;
 import dk.minepay.server.bukkit.classes.StoreRequest;
+import dk.minepay.server.bukkit.classes.Vote;
+import dk.minepay.server.bukkit.classes.VoteStatus;
 import dk.minepay.server.bukkit.listeners.JoinListener;
+import dk.minepay.server.bukkit.managers.EventManager;
 import dk.minepay.server.bukkit.managers.RequestManager;
 import dk.minepay.server.bukkit.managers.SocketManager;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,7 +26,6 @@ public class MinePayApi {
     private SocketManager socketManager;
     @Getter private RequestManager requestManager;
     @Getter @Setter private String token;
-    @Getter private HashMap<UUID, StoreRequest> joinRequests = new HashMap<>();
 
     /** Constructor for the MinePayApi class. */
     public MinePayApi() {}
@@ -69,57 +68,72 @@ public class MinePayApi {
         new JoinListener();
         initRequestManager();
         checkFolders();
-        loadJoinRequests();
+        loadOnline();
     }
 
+    /** Checks if the required folders exist and creates them if they do not. */
     public void checkFolders() {
         File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
         if (!MinepayAPI.exists()) {
             MinepayAPI.mkdir();
         }
-        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
-        if (!joinRequests.exists()) {
+        File saves = new File(MinepayAPI, "saves.yml");
+        if (!saves.exists()) {
             try {
-                joinRequests.createNewFile();
+                saves.createNewFile();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void saveJoinRequests() {
+    /** Saves the online requests and votes to a file. */
+    public void saveOnline() {
         File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
-        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
-        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(joinRequests);
-        for (UUID uuid : this.joinRequests.keySet()) {
-            yamlConfiguration.set(uuid.toString(), this.joinRequests.get(uuid).get_id());
+        File saves = new File(MinepayAPI, "saves.yml");
+        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(saves);
+        List<String> requests = new ArrayList<>();
+        List<String> votes = new ArrayList<>();
+        for (StoreRequest joinRequest : EventManager.requestsOnline) {
+            requests.add(joinRequest.get_id());
         }
+        for (Vote vote : EventManager.votesOnline) {
+            votes.add(vote.get_id());
+        }
+        yamlConfiguration.set("requests", requests);
+        yamlConfiguration.set("votes", votes);
         try {
-            yamlConfiguration.save(joinRequests);
+            yamlConfiguration.save(saves);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void loadJoinRequests() {
+    /** Loads the online votes/requests from the saves.yml file. */
+    public void loadOnline() {
         File MinepayAPI = new File(plugin.getDataFolder().getParent(), "MinepayAPI");
-        File joinRequests = new File(MinepayAPI, "joinRequests.yml");
-        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(joinRequests);
-        for (String key : yamlConfiguration.getKeys(false)) {
-            this.joinRequests.put(
-                    UUID.fromString(key),
-                    requestManager.getRequest(yamlConfiguration.getString(key)));
+        File saves = new File(MinepayAPI, "saves.yml");
+        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(saves);
+        List<String> requests = yamlConfiguration.getStringList("requests");
+        List<String> votes = yamlConfiguration.getStringList("votes");
+        for (String request : requests) {
+            StoreRequest joinRequest = requestManager.getRequest(request);
+            EventManager.requestsOnline.add(joinRequest);
         }
+        for (String vote : votes) {
+            Vote vote1 = requestManager.getVote(vote);
+            EventManager.votesOnline.add(vote1);
+        }
+        saves.delete();
     }
 
+    /** Disables the MinePayApi instance. */
     public void disable() {
         if (this.socketManager != null) {
             this.socketManager.getSocket().close();
         }
-        if (this.joinRequests != null && !this.joinRequests.isEmpty()) {
-            checkFolders();
-            saveJoinRequests();
-        }
+        checkFolders();
+        saveOnline();
     }
 
     /** Initializes the RequestManager and schedules a task to process requests periodically. */
@@ -142,15 +156,41 @@ public class MinePayApi {
                             }
 
                             for (StoreRequest request : requests) {
-                                requestManager.callEvent(request);
+                                EventManager.callRequestEvent(request);
                             }
 
-                            requestManager.getCalledIds().clear();
+                            EventManager.calledIds.clear();
+                        },
+                        20L,
+                        600L);
+        plugin.getServer()
+                .getScheduler()
+                .runTaskTimerAsynchronously(
+                        plugin,
+                        () -> {
+                            Vote[] votes =
+                                    requestManager.getVotes(
+                                            Collections.singletonList(VoteStatus.pending));
+
+                            if (votes.length == 0) {
+                                return;
+                            }
+
+                            for (Vote vote : votes) {
+                                EventManager.callVoteEvent(vote);
+                            }
+
+                            EventManager.calledVoteIds.clear();
                         },
                         20L,
                         600L);
     }
 
+    /**
+     * Runs the given Runnable asynchronously.
+     *
+     * @param runnable the Runnable to run
+     */
     public static void runAsync(Runnable runnable) {
         MinePayApi.getINSTANCE()
                 .getPlugin()

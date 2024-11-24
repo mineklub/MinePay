@@ -15,7 +15,10 @@ import org.bukkit.event.Event;
 public class EvtStoreRequest extends SkriptEvent {
     static {
         Skript.registerEvent(
-                "Store Request", EvtStoreRequest.class, StoreRequestEvent.class, "store request");
+                "Store Request",
+                EvtStoreRequest.class,
+                StoreRequestEvent.class,
+                "[mineclub] store request");
         EventValues.registerEventValue(
                 StoreRequestEvent.class,
                 OfflinePlayer.class,

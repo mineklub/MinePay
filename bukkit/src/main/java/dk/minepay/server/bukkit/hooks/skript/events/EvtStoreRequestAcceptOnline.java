@@ -18,7 +18,7 @@ public class EvtStoreRequestAcceptOnline extends SkriptEvent {
                 "Store Request Accept Online",
                 EvtStoreRequestAcceptOnline.class,
                 StoreRequestAcceptOnlineEvent.class,
-                "store request accept online");
+                "[mineclub] store request accept online");
         EventValues.registerEventValue(
                 StoreRequestAcceptOnlineEvent.class,
                 Player.class,

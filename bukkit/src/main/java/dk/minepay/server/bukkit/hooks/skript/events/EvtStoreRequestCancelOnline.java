@@ -18,7 +18,7 @@ public class EvtStoreRequestCancelOnline extends SkriptEvent {
                 "Store Request Cancel Online",
                 EvtStoreRequestCancelOnline.class,
                 StoreRequestCancelOnlineEvent.class,
-                "store request cancel online");
+                "[mineclub] store request cancel online");
         EventValues.registerEventValue(
                 StoreRequestCancelOnlineEvent.class,
                 Player.class,

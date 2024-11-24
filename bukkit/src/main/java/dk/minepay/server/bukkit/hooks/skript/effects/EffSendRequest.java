@@ -13,7 +13,8 @@ import org.bukkit.event.Event;
 /** The type Eff send request. */
 public class EffSendRequest extends Effect {
     static {
-        Skript.registerEffect(EffSendRequest.class, "send request %products% to %players%");
+        Skript.registerEffect(
+                EffSendRequest.class, "[mineclub] send request %products% to %players%");
     }
 
     /** Instantiates a new Eff send request. */

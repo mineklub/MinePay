@@ -75,4 +75,22 @@ public class StoreProduct {
         }
         return jsonObject;
     }
+
+    @Override
+    public String toString() {
+        return "StoreProduct{"
+                + "name='"
+                + name
+                + '\''
+                + ", id='"
+                + id
+                + '\''
+                + ", price="
+                + price
+                + ", quantity="
+                + quantity
+                + ", metadata="
+                + metadata
+                + '}';
+    }
 }

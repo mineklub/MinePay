@@ -1,5 +1,6 @@
 package dk.minepay.server.bukkit.classes;
 
+import java.util.Arrays;
 import java.util.UUID;
 import lombok.Getter;
 
@@ -48,5 +49,25 @@ public class StoreRequest {
      */
     public UUID getUuid() {
         return UUID.fromString(uuid);
+    }
+
+    @Override
+    public String toString() {
+        return "StoreRequest{"
+                + "_id='"
+                + _id
+                + '\''
+                + ", uuid='"
+                + uuid
+                + '\''
+                + ", products="
+                + Arrays.toString(products)
+                + ", status="
+                + status
+                + ", serverStatus="
+                + serverStatus
+                + ", price="
+                + price
+                + '}';
     }
 }

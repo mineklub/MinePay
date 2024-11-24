@@ -1,7 +1,10 @@
 package dk.minepay.server.bukkit.listeners;
 
 import dk.minepay.server.bukkit.MinePayApi;
-import dk.minepay.server.bukkit.managers.RequestManager;
+import dk.minepay.server.bukkit.classes.StoreRequest;
+import dk.minepay.server.bukkit.classes.Vote;
+import dk.minepay.server.bukkit.managers.EventManager;
+import java.util.List;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,15 +28,18 @@ public class JoinListener implements Listener {
      */
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        RequestManager requestManager = MinePayApi.getINSTANCE().getRequestManager();
-        if (MinePayApi.getINSTANCE()
-                .getJoinRequests()
-                .containsKey(event.getPlayer().getUniqueId())) {
-            requestManager.callOnlineEvent(
-                    MinePayApi.getINSTANCE()
-                            .getJoinRequests()
-                            .get(event.getPlayer().getUniqueId()));
-            MinePayApi.getINSTANCE().getJoinRequests().remove(event.getPlayer().getUniqueId());
+        List<StoreRequest> requests =
+                EventManager.getRequestsOnlineByUUID(event.getPlayer().getUniqueId());
+        if (!requests.isEmpty()) {
+            for (StoreRequest request : requests) {
+                EventManager.callOnlineRequestEvent(request);
+            }
+        }
+        List<Vote> votes = EventManager.getVotesOnlineByUUID(event.getPlayer().getUniqueId());
+        if (!votes.isEmpty()) {
+            for (Vote vote : votes) {
+                EventManager.callOnlineVoteEvent(vote);
+            }
         }
     }
 }
