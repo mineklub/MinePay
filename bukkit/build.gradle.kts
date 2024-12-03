@@ -45,6 +45,8 @@ tasks {
     withType<ShadowJar> {
         exclude("META-INF/*")
         minimize()
+
+        archiveFileName.set("../../../build/libs/MinePay.jar")
     }
     java {
         withJavadocJar()
