@@ -8,7 +8,7 @@ import lombok.Setter;
 /** Class representing a product in the store. */
 @Getter
 @Setter
-public class StoreProduct {
+public class StoreProduct implements StoreItem {
     private String name;
     private String id;
     private double price;

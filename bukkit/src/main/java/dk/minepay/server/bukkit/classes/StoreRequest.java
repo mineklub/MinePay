@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /** Class representing a store request. */
 @Getter
-public class StoreRequest {
+public class StoreRequest implements StoreItem {
     private String _id;
     private String uuid;
     private StoreProduct[] products;

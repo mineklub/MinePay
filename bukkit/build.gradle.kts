@@ -43,10 +43,16 @@ tasks {
         }
     }
     withType<ShadowJar> {
-        exclude("META-INF/*")
+        exclude("META-INF/**")
         minimize()
+        relocate("com.google.gson", "dk.minepay.gson")
+        relocate("com.google.errorprone", "dk.minepay.errorprone")
+        relocate("io.socket", "dk.minepay.socketio")
+        relocate("okhttp3", "dk.minepay.okhttp3")
+        relocate("okio", "dk.minepay.okio")
+        relocate("org.json", "dk.minepay.json")
 
-        archiveFileName.set("../../../build/libs/MinePay.jar")
+        archiveFileName.set("../../../build/libs/MinePay-${project.rootProject.version}.jar")
     }
     java {
         withJavadocJar()

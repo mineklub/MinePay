@@ -158,6 +158,7 @@ public class MinePayApi {
                             }
 
                             for (StoreRequest request : requests) {
+                                System.out.println("Request: " + request.toString());
                                 EventManager.callRequestEvent(request);
                             }
 

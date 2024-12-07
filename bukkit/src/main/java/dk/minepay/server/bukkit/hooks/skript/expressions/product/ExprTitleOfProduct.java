@@ -22,7 +22,7 @@ public class ExprTitleOfProduct extends SimplePropertyExpression<StoreProduct, S
 
     @Override
     protected String getPropertyName() {
-        return "name of product";
+        return "title of product";
     }
 
     @Override
@@ -61,6 +61,6 @@ public class ExprTitleOfProduct extends SimplePropertyExpression<StoreProduct, S
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "name of product";
+        return "title of product";
     }
 }
