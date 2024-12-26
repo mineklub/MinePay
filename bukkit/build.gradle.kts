@@ -67,6 +67,9 @@ tasks {
     }
 }
 
+group = rootProject.group
+version = rootProject.version
+
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
