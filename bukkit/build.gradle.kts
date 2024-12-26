@@ -1,9 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
 
 plugins {
     id("java")
     alias(libs.plugins.shadow)
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.30.0"
+    signing
 }
 
 repositories {
@@ -58,34 +62,40 @@ tasks {
         withJavadocJar()
         withSourcesJar()
     }
+    signing {
+        useGpgCmd()
+    }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "dk.minepay"
-            artifactId = "minepay-bukkit"
-            version = project.rootProject.version.toString()
-
-            from(components["java"])
-
-            pom {
-                name = "MinePay-Bukkit"
-                description = "A Bukkit plugin for MinePay"
-                url = "https://mineclub.dk"
-                inceptionYear = "2024"
-                developers {
-                    developer {
-                        id = "mineclub"
-                        name = "MineClub"
-                    }
-                }
-                scm {
-                    connection = "scm:git:https://github.com/mineklub/MinePay.git"
-                    developerConnection = "scm:git:ssh://github.com/mineklub/MinePay.git"
-                    url = "https://github.com/mineklub/MinePay"
-                }
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    configure(JavaLibrary(
+        javadocJar = JavadocJar.None(),
+        sourcesJar = true,
+    ))
+    pom {
+        name = rootProject.name
+        description = "Payment system for servers on mineclub.dk"
+        inceptionYear = "2024"
+        url = "https://mineclub.dk/"
+        licenses {
+            license {
+                name = "GNU GENERAL PUBLIC LICENSE"
+                url = "https://www.gnu.org/licenses/gpl-3.0.html"
             }
+        }
+        developers {
+            developer {
+                id = "mineclub"
+                name = "MineClub"
+                url = "https://github.com/mineklub/"
+            }
+        }
+        scm {
+            url = "https://github.com/mineklub/MinePay/"
+            connection = "scm:git:git://github.com/mineklub/MinePay.git"
+            developerConnection = "scm:git:ssh://git@github.com/mineklub/MinePay.git"
         }
     }
 }

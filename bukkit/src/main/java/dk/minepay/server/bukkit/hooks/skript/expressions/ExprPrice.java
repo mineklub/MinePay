@@ -13,6 +13,7 @@ import dk.minepay.server.bukkit.classes.StoreProduct;
 import dk.minepay.server.bukkit.classes.StoreRequest;
 import org.bukkit.event.Event;
 
+/** Price of product/request expression. */
 public class ExprPrice extends SimplePropertyExpression<StoreItem, Double> {
     static {
         Skript.registerExpression(
