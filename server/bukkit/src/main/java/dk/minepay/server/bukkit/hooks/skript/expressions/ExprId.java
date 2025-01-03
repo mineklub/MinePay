@@ -11,6 +11,7 @@ import ch.njol.util.coll.CollectionUtils;
 import dk.minepay.common.classes.StoreItem;
 import dk.minepay.common.classes.StoreProduct;
 import dk.minepay.common.classes.StoreRequest;
+import dk.minepay.common.classes.Vote;
 import org.bukkit.event.Event;
 
 /** ID of product expression. */
@@ -23,7 +24,9 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
                 "[mineclub] id of %product%",
                 "[mineclub] %product%'s id",
                 "[mineclub] id of %request%",
-                "[mineclub] %request%'s id");
+                "[mineclub] %request%'s id",
+                "[mineclub] id of %vote%",
+                "[mineclub] %vote%'s id");
     }
 
     /** Creates a new id of product expression. */
@@ -32,6 +35,7 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
     private int pattern;
     private Expression<StoreRequest> request;
     private Expression<StoreProduct> product;
+    private Expression<Vote> vote;
 
     @Override
     public String convert(StoreItem item) {
@@ -39,6 +43,8 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
             return ((StoreProduct) item).getId();
         } else if (item instanceof StoreRequest) {
             return ((StoreRequest) item).get_id();
+        } else if (item instanceof Vote) {
+            return ((Vote) item).get_id();
         }
 
         return null;
@@ -96,8 +102,10 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
         pattern = matchedPattern;
         if (pattern == 0 || pattern == 1) {
             product = (Expression<StoreProduct>) expressions[0];
-        } else {
+        } else if (pattern == 2 || pattern == 3) {
             request = (Expression<StoreRequest>) expressions[0];
+        } else if (pattern == 4 || pattern == 5) {
+            vote = (Expression<Vote>) expressions[0];
         }
         setExpr((Expression<? extends StoreItem>) expressions[0]);
         return true;
@@ -105,6 +113,6 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
 
     @Override
     public String toString(Event event, boolean debug) {
-        return "id of product/request";
+        return "id of product/request/vote";
     }
 }

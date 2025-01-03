@@ -5,7 +5,7 @@ import lombok.Getter;
 
 /** Class that represents a vote. */
 @Getter
-public class Vote {
+public class Vote implements StoreItem {
     private String _id;
     private String uuid;
     private VoteStatus status;
