@@ -8,7 +8,7 @@ import lombok.Getter;
 public class Vote {
     private String _id;
     private String uuid;
-    private String status;
+    private VoteStatus status;
 
     /** Constructor for Vote. */
     public Vote() {}
@@ -20,7 +20,7 @@ public class Vote {
      * @param uuid the uuid of the player that voted
      * @param status the status of the vote
      */
-    public Vote(String _id, String uuid, String status) {
+    public Vote(String _id, String uuid, VoteStatus status) {
         this._id = _id;
         this.uuid = uuid;
         this.status = status;

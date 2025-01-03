@@ -7,10 +7,7 @@ import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
-import dk.minepay.common.classes.RequestStatus;
-import dk.minepay.common.classes.StoreProduct;
-import dk.minepay.common.classes.StoreRequest;
-import dk.minepay.common.classes.Vote;
+import dk.minepay.common.classes.*;
 import java.io.StreamCorruptedException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -222,7 +219,7 @@ public class ClassLoader {
                                         return new Vote(
                                                 (String) fields.getObject("_id"),
                                                 (String) fields.getObject("uuid"),
-                                                (String) fields.getObject("status"));
+                                                (VoteStatus) fields.getObject("status"));
                                     }
 
                                     @Override
