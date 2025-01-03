@@ -20,10 +20,10 @@ public class ExprPrice extends SimplePropertyExpression<StoreItem, Double> {
                 ExprPrice.class,
                 Double.class,
                 ExpressionType.PROPERTY,
-                "[the] price of %products%",
-                "%products%'s price",
-                "[the] price of %requests%",
-                "%requests%'s price");
+                "[mineclub] price of %products%",
+                "[mineclub] %products%'s price",
+                "[mineclub] price of %requests%",
+                "[mineclub] %requests%'s price");
     }
 
     /** Creates a new price of request expression. */

@@ -20,10 +20,10 @@ public class ExprId extends SimplePropertyExpression<StoreItem, String> {
                 ExprId.class,
                 String.class,
                 ExpressionType.PROPERTY,
-                "[the] id of %product%",
-                "%product%'s id",
-                "[the] id of %request%",
-                "%request%'s id");
+                "[mineclub] id of %product%",
+                "[mineclub] %product%'s id",
+                "[mineclub] id of %request%",
+                "[mineclub] %request%'s id");
     }
 
     /** Creates a new id of product expression. */

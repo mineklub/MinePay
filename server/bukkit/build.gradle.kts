@@ -37,7 +37,7 @@ paperPluginYaml {
     main = "dk.minepay.server.bukkit.MinePayPlugin"
     description = "MinePay er et betalingssystem til MineClub servere."
     author = "MineClub"
-    apiVersion = "1.13"
+    apiVersion = "1.19"
     dependencies {
         server("Skript", PaperPluginYaml.Load.BEFORE, false, joinClasspath = true)
     }
