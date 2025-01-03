@@ -1,5 +1,5 @@
 group = "dk.minepay"
-version = "0.0.1"
+version = "0.0.2"
 
 repositories {
     mavenCentral()
@@ -13,7 +13,6 @@ plugins {
 
 subprojects {
     plugins.apply("java")
-    plugins.apply("maven-publish")
     plugins.apply("com.diffplug.spotless")
 
     spotless {
