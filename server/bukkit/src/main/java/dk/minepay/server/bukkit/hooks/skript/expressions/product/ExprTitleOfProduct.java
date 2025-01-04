@@ -9,7 +9,7 @@ import org.bukkit.event.Event;
 /** Title of product expression. */
 public class ExprTitleOfProduct extends SimplePropertyExpression<StoreProduct, String> {
     static {
-        register(ExprTitleOfProduct.class, String.class, "title", "product");
+        register(ExprTitleOfProduct.class, String.class, "[mineclub] title", "product");
     }
 
     /** Creates a new title of product expression. */
