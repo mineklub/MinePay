@@ -39,7 +39,7 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     implementation(libs.json)
-    implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT")
+    implementation(libs.configurate)
 }
 
 tasks {

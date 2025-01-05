@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("java-library")
     alias(libs.plugins.shadow)
 }
 
@@ -24,6 +24,7 @@ dependencies {
         exclude(group = "com.squareup.okhttp3", module = "okhttp")
     }
     implementation(libs.json)
+    api(libs.jspecify)
 }
 
 java {

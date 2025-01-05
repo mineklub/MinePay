@@ -9,6 +9,8 @@ lombok = "1.18.36"
 skript = "2.10.0-pre1"
 json = "20241224"
 okio = "1.17.6"
+jspecify = "1.0.0"
+configurate = "4.2.0-SNAPSHOT"
 
 [plugins]
 shadow = {id = "com.gradleup.shadow", version.ref = "shadow"}
@@ -23,3 +25,5 @@ lombok = {group = "org.projectlombok", name = "lombok", version.ref = "lombok"}
 skript = {group = "com.github.SkriptLang", name = "Skript", version.ref = "skript"}
 json = {group = "org.json", name = "json", version.ref = "json"}
 okio = {group = "com.squareup.okio", name = "okio", version.ref = "okio"}
+jspecify = {group = "org.jspecify", name = "jspecify", version.ref = "jspecify"}
+configurate = {group = "org.spongepowered", name = "configurate", version.ref = "configurate"}

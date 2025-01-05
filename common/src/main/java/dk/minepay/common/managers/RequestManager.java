@@ -3,15 +3,16 @@ package dk.minepay.common.managers;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import dk.minepay.common.IMinePayApi;
 import dk.minepay.common.classes.*;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.*;
 import lombok.Getter;
 import okhttp3.*;
 import okhttp3.RequestBody;
+import org.jspecify.annotations.Nullable;
 
 /** Manager class for handling store requests. */
 @Getter
@@ -38,7 +39,7 @@ public class RequestManager {
      * @param storeProducts the store products to include in the request
      * @return a JsonObject representing the response from the store API
      */
-    public JsonObject createRequest(UUID uuid, StoreProduct[] storeProducts) {
+    public @Nullable JsonObject createRequest(UUID uuid, StoreProduct[] storeProducts) {
         RequestBody requestBody;
         MediaType mediaType = MediaType.parse("application/json");
         JsonObject jsonObject = new JsonObject();
@@ -72,7 +73,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             return new Gson().fromJson(response.body().string(), JsonObject.class);
         } catch (IOException e) {
             return null;
@@ -112,15 +115,22 @@ public class RequestManager {
             Future<Response> future = executor.submit(callable);
             response = future.get();
         } catch (InterruptedException | ExecutionException e) {
-            return null;
+            return new StoreRequest[0];
         }
 
         try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            if (response.body() == null) {
+                return new StoreRequest[0];
+            }
+            JsonPrimitive jsonPrimitive =
+                    new Gson().fromJson(response.body().string(), JsonPrimitive.class);
+            if (!jsonPrimitive.isJsonObject()) {
+                return new StoreRequest[0];
+            }
+            JsonObject jsonObject = new Gson().fromJson(jsonPrimitive, JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
         } catch (IOException e) {
-            return null;
+            return new StoreRequest[0];
         }
     }
 
@@ -130,7 +140,7 @@ public class RequestManager {
      * @param requestId the ID of the request to retrieve
      * @return a StoreRequest object representing the retrieved request
      */
-    public StoreRequest getRequest(String requestId) {
+    public @Nullable StoreRequest getRequest(String requestId) {
         HttpUrl.Builder urlBuilder =
                 Objects.requireNonNull(HttpUrl.parse(requestUrl + requestId)).newBuilder();
 
@@ -154,7 +164,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), StoreRequest.class);
         } catch (IOException e) {
@@ -168,7 +180,7 @@ public class RequestManager {
      * @param requestId the ID of the request to accept
      * @return a JsonObject representing the response from the store API
      */
-    public JsonObject acceptRequest(String requestId) {
+    public @Nullable JsonObject acceptRequest(String requestId) {
         RequestBody requestBody;
         MediaType mediaType = MediaType.parse("application/json");
         JsonObject jsonObject = new JsonObject();
@@ -198,7 +210,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             return new Gson().fromJson(response.body().string(), JsonObject.class);
         } catch (IOException e) {
             return null;
@@ -211,7 +225,7 @@ public class RequestManager {
      * @param requestId the ID of the request to cancel
      * @return a JsonObject representing the response from the store API
      */
-    public JsonObject cancelRequest(String requestId) {
+    public @Nullable JsonObject cancelRequest(String requestId) {
         RequestBody requestBody;
         MediaType mediaType = MediaType.parse("application/json");
         JsonObject jsonObject = new JsonObject();
@@ -241,7 +255,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             return new Gson().fromJson(response.body().string(), JsonObject.class);
         } catch (IOException e) {
             return null;
@@ -281,15 +297,22 @@ public class RequestManager {
             Future<Response> future = executor.submit(callable);
             response = future.get();
         } catch (InterruptedException | ExecutionException e) {
-            return null;
+            return new Vote[0];
         }
 
         try {
-            assert response.body() != null;
-            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+            if (response.body() == null) {
+                return new Vote[0];
+            }
+            JsonPrimitive jsonPrimitive =
+                    new Gson().fromJson(response.body().string(), JsonPrimitive.class);
+            if (!jsonPrimitive.isJsonObject()) {
+                return new Vote[0];
+            }
+            JsonObject jsonObject = new Gson().fromJson(jsonPrimitive, JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
         } catch (IOException e) {
-            return null;
+            return new Vote[0];
         }
     }
 
@@ -299,7 +322,7 @@ public class RequestManager {
      * @param voteId the ID of the vote to retrieve
      * @return a Vote object representing the retrieved vote
      */
-    public Vote getVote(String voteId) {
+    public @Nullable Vote getVote(String voteId) {
         HttpUrl.Builder urlBuilder =
                 Objects.requireNonNull(HttpUrl.parse(voteUrl + voteId)).newBuilder();
 
@@ -323,7 +346,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), Vote.class);
         } catch (IOException e) {
@@ -337,7 +362,7 @@ public class RequestManager {
      * @param voteId the ID of the vote to accept
      * @return a JsonObject representing the response from the vote API
      */
-    public JsonObject acceptVote(String voteId) {
+    public @Nullable JsonObject acceptVote(String voteId) {
         RequestBody requestBody;
         MediaType mediaType = MediaType.parse("application/json");
         JsonObject jsonObject = new JsonObject();
@@ -366,7 +391,9 @@ public class RequestManager {
         }
 
         try {
-            assert response.body() != null;
+            if (response.body() == null) {
+                return null;
+            }
             return new Gson().fromJson(response.body().string(), JsonObject.class);
         } catch (IOException e) {
             return null;
