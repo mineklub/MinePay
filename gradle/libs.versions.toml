@@ -26,4 +26,4 @@ skript = {group = "com.github.SkriptLang", name = "Skript", version.ref = "skrip
 json = {group = "org.json", name = "json", version.ref = "json"}
 okio = {group = "com.squareup.okio", name = "okio", version.ref = "okio"}
 jspecify = {group = "org.jspecify", name = "jspecify", version.ref = "jspecify"}
-configurate = {group = "org.spongepowered", name = "configurate", version.ref = "configurate"}
+configurate-yaml = {group = "org.spongepowered", name = "configurate-yaml", version.ref = "configurate"}

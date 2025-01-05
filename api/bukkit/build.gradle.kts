@@ -13,7 +13,7 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://repo.skriptlang.org/releases")
+    maven("https://repo.skriptlang.org/releases/")
     maven("https://repo.spongepowered.org/maven/")
 }
 
@@ -39,7 +39,7 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     implementation(libs.json)
-    implementation(libs.configurate)
+    implementation(libs.configurate.yaml)
 }
 
 tasks {
