@@ -50,6 +50,9 @@ public class EventManager {
         if (player.isOnline()) {
             callOnlineRequestEvent(storeRequest);
         } else {
+            if (requestsOnline.stream().anyMatch(r -> r.get_id().equals(storeRequest.get_id()))) {
+                return;
+            }
             requestsOnline.add(storeRequest);
         }
         if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
@@ -93,6 +96,9 @@ public class EventManager {
         if (player.isOnline()) {
             callOnlineVoteEvent(vote);
         } else {
+            if (votesOnline.stream().anyMatch(r -> r.get_id().equals(vote.get_id()))) {
+                return;
+            }
             votesOnline.add(vote);
         }
 

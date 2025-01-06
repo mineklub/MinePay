@@ -63,6 +63,10 @@ tasks {
         relocate("okhttp3", "dk.minepay.okhttp3")
         relocate("okio", "dk.minepay.okio")
         relocate("org.json", "dk.minepay.json")
+        relocate("org.spongepowered.configurate", "dk.minepay.configurate")
+        relocate("io.leangen.geantyref", "dk.minepay.geantyref")
+        relocate("org.yaml.snakeyaml", "dk.minepay.snakeyaml")
+        relocate("org.jspecify", "dk.minepay.jspecify")
 
         archiveFileName.set("../../../../build/libs/MinePay-Bukkit-${project.rootProject.version}.jar")
     }

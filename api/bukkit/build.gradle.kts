@@ -4,7 +4,7 @@ import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
 
 plugins {
-    id("java")
+    id("java-library")
     alias(libs.plugins.shadow)
     id("com.vanniktech.maven.publish") version "0.30.0"
     signing
@@ -14,11 +14,10 @@ repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.skriptlang.org/releases/")
-    maven("https://repo.spongepowered.org/maven/")
 }
 
 dependencies {
-    implementation(project(":common"))
+    api(project(":common"))
     compileOnly(libs.spigot) {
         exclude(group = "net.md-5", module = "bungeecord-chat")
         exclude(group = "com.google.guava", module = "guava")
@@ -53,6 +52,9 @@ tasks {
         relocate("okio", "dk.minepay.okio")
         relocate("org.json", "dk.minepay.json")
         relocate("org.spongepowered.configurate", "dk.minepay.configurate")
+        relocate("io.leangen.geantyref", "dk.minepay.geantyref")
+        relocate("org.yaml.snakeyaml", "dk.minepay.snakeyaml")
+        relocate("org.jspecify", "dk.minepay.jspecify")
     }
     java {
         withJavadocJar()

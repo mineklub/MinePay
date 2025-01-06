@@ -1,9 +1,6 @@
 package dk.minepay.common.managers;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import dk.minepay.common.IMinePayApi;
 import dk.minepay.common.classes.*;
 import java.io.IOException;
@@ -122,14 +119,9 @@ public class RequestManager {
             if (response.body() == null) {
                 return new StoreRequest[0];
             }
-            JsonPrimitive jsonPrimitive =
-                    new Gson().fromJson(response.body().string(), JsonPrimitive.class);
-            if (!jsonPrimitive.isJsonObject()) {
-                return new StoreRequest[0];
-            }
-            JsonObject jsonObject = new Gson().fromJson(jsonPrimitive, JsonObject.class);
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
-        } catch (IOException e) {
+        } catch (IOException | JsonSyntaxException e) {
             return new StoreRequest[0];
         }
     }
@@ -304,14 +296,9 @@ public class RequestManager {
             if (response.body() == null) {
                 return new Vote[0];
             }
-            JsonPrimitive jsonPrimitive =
-                    new Gson().fromJson(response.body().string(), JsonPrimitive.class);
-            if (!jsonPrimitive.isJsonObject()) {
-                return new Vote[0];
-            }
-            JsonObject jsonObject = new Gson().fromJson(jsonPrimitive, JsonObject.class);
+            JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
             return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
-        } catch (IOException e) {
+        } catch (IOException | JsonSyntaxException e) {
             return new Vote[0];
         }
     }

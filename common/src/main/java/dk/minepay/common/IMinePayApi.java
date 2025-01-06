@@ -5,5 +5,9 @@ public interface IMinePayApi {
         return null;
     }
 
+    static IMinePayApi initApi(Object javaPlugin) {
+        return null;
+    }
+
     String getToken();
 }

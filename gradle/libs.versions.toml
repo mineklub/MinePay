@@ -10,7 +10,7 @@ skript = "2.10.0-pre1"
 json = "20241224"
 okio = "1.17.6"
 jspecify = "1.0.0"
-configurate = "4.2.0-SNAPSHOT"
+configurate = "4.1.2"
 
 [plugins]
 shadow = {id = "com.gradleup.shadow", version.ref = "shadow"}
