@@ -10,12 +10,11 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    mavenLocal()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
-    implementation("dk.minepay:api-bukkit:0.0.3-SNAPSHOT")
+    implementation("dk.minepay:api-bukkit:0.0.3")
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") {
         exclude(group = "net.md-5", module = "bungeecord-chat")
     }

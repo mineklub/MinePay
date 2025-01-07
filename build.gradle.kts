@@ -1,5 +1,5 @@
 group = "dk.minepay"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.3"
 
 repositories {
     mavenCentral()
