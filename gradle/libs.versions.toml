@@ -8,7 +8,7 @@ socketclient = "2.1.1"
 lombok = "1.18.36"
 skript = "2.10.0-pre1"
 json = "20250107"
-okio = "1.17.6"
+okio = "3.10.2"
 jspecify = "1.0.0"
 configurate = "4.1.2"
 
