@@ -297,7 +297,11 @@ public class RequestManager {
                 return new Vote[0];
             }
             JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            return new Gson().fromJson(jsonObject.get("data"), Vote[].class);
+            Vote[] votes = new Gson().fromJson(jsonObject.get("data"), Vote[].class);
+            if (votes == null) {
+                return new Vote[0];
+            }
+            return votes;
         } catch (IOException | JsonSyntaxException e) {
             return new Vote[0];
         }
