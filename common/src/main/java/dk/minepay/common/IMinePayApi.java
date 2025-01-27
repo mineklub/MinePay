@@ -1,5 +1,6 @@
 package dk.minepay.common;
 
+@SuppressWarnings("SameReturnValue")
 public interface IMinePayApi {
     static IMinePayApi getInstance() {
         return null;

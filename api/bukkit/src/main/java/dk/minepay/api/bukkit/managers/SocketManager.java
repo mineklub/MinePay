@@ -12,8 +12,9 @@ import java.util.HashMap;
 import lombok.Getter;
 
 /** Manager class for the socket connection. */
+@Getter
 public class SocketManager {
-    @Getter private Socket socket;
+    private Socket socket;
 
     /** Constructor for the SocketManager class. */
     public SocketManager() {}

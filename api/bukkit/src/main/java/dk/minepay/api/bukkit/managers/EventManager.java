@@ -14,16 +14,16 @@ import org.bukkit.entity.Player;
 @Getter
 public class EventManager {
     /** The set of called store request IDs. */
-    public static HashSet<String> calledIds = new HashSet<>();
+    public static final HashSet<String> calledIds = new HashSet<>();
 
     /** The set of called vote IDs. */
-    public static HashSet<String> calledVoteIds = new HashSet<>();
+    public static final HashSet<String> calledVoteIds = new HashSet<>();
 
     /** The list of store requests that are online. */
-    public static HashMap<String, StoreRequest> requestsOnline = new HashMap<>();
+    public static final HashMap<String, StoreRequest> requestsOnline = new HashMap<>();
 
     /** The list of votes that are online. */
-    public static HashMap<String, Vote> votesOnline = new HashMap<>();
+    public static final HashMap<String, Vote> votesOnline = new HashMap<>();
 
     /** Constructor for EventManager. */
     public EventManager() {}
@@ -129,7 +129,7 @@ public class EventManager {
                                 .getPluginManager()
                                 .callEvent(event));
 
-        votesOnline.remove(vote);
+        votesOnline.remove(vote.get_id());
     }
 
     /**
@@ -162,7 +162,7 @@ public class EventManager {
                                     .callEvent(event));
         }
 
-        requestsOnline.remove(storeRequest);
+        requestsOnline.remove(storeRequest.get_id());
     }
 
     /**

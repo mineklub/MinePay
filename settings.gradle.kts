@@ -2,7 +2,7 @@ rootProject.name = "MinePay"
 
 include("common")
 project(":common").projectDir = file("common")
-sequenceOf("bukkit").forEach { it ->
+sequenceOf("bukkit").forEach {
     val name = "server-$it"
     if (file("server/$it").exists()) {
         include(name)
