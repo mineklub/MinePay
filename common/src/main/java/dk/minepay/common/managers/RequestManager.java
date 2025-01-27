@@ -120,7 +120,8 @@ public class RequestManager {
                 return new StoreRequest[0];
             }
             JsonObject jsonObject = new Gson().fromJson(response.body().string(), JsonObject.class);
-            StoreRequest[] requests = new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
+            StoreRequest[] requests =
+                    new Gson().fromJson(jsonObject.get("data"), StoreRequest[].class);
             if (requests == null) {
                 return new StoreRequest[0];
             }

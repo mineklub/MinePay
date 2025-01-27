@@ -5,10 +5,7 @@ import dk.minepay.api.bukkit.events.*;
 import dk.minepay.common.classes.RequestStatus;
 import dk.minepay.common.classes.StoreRequest;
 import dk.minepay.common.classes.Vote;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -23,10 +20,10 @@ public class EventManager {
     public static HashSet<String> calledVoteIds = new HashSet<>();
 
     /** The list of store requests that are online. */
-    public static List<StoreRequest> requestsOnline = new ArrayList<>();
+    public static HashMap<String, StoreRequest> requestsOnline = new HashMap<>();
 
     /** The list of votes that are online. */
-    public static List<Vote> votesOnline = new ArrayList<>();
+    public static HashMap<String, Vote> votesOnline = new HashMap<>();
 
     /** Constructor for EventManager. */
     public EventManager() {}
@@ -50,10 +47,11 @@ public class EventManager {
         if (player.isOnline()) {
             callOnlineRequestEvent(storeRequest);
         } else {
-            if (requestsOnline.stream().anyMatch(r -> r.get_id().equals(storeRequest.get_id()))) {
+            if (requestsOnline.values().stream()
+                    .anyMatch(r -> r.get_id().equals(storeRequest.get_id()))) {
                 return;
             }
-            requestsOnline.add(storeRequest);
+            requestsOnline.put(storeRequest.get_id(), storeRequest);
         }
         if (storeRequest.getStatus().equals(RequestStatus.accepted)) {
             StoreRequestAcceptEvent event = new StoreRequestAcceptEvent(storeRequest, player);
@@ -96,10 +94,10 @@ public class EventManager {
         if (player.isOnline()) {
             callOnlineVoteEvent(vote);
         } else {
-            if (votesOnline.stream().anyMatch(r -> r.get_id().equals(vote.get_id()))) {
+            if (votesOnline.values().stream().anyMatch(r -> r.get_id().equals(vote.get_id()))) {
                 return;
             }
-            votesOnline.add(vote);
+            votesOnline.put(vote.get_id(), vote);
         }
 
         VoteEvent event = new VoteEvent(vote, player);
@@ -175,7 +173,7 @@ public class EventManager {
      */
     public static List<StoreRequest> getRequestsOnlineByUUID(UUID player) {
         List<StoreRequest> requests = new ArrayList<>();
-        for (StoreRequest request : requestsOnline) {
+        for (StoreRequest request : requestsOnline.values()) {
             if (request.getUuid().equals(player)) {
                 requests.add(request);
             }
@@ -191,7 +189,7 @@ public class EventManager {
      */
     public static List<Vote> getVotesOnlineByUUID(UUID player) {
         List<Vote> votes = new ArrayList<>();
-        for (Vote vote : votesOnline) {
+        for (Vote vote : votesOnline.values()) {
             if (vote.getUuid().equals(player)) {
                 votes.add(vote);
             }

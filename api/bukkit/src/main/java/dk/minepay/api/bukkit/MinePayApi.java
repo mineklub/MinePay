@@ -99,10 +99,10 @@ public class MinePayApi implements IMinePayApi {
         YamlConfigurationLoader loader = YamlConfigurationLoader.builder().file(saves).build();
         List<String> requests = new ArrayList<>();
         List<String> votes = new ArrayList<>();
-        for (StoreRequest joinRequest : EventManager.requestsOnline) {
+        for (StoreRequest joinRequest : EventManager.requestsOnline.values()) {
             requests.add(joinRequest.get_id());
         }
-        for (Vote vote : EventManager.votesOnline) {
+        for (Vote vote : EventManager.votesOnline.values()) {
             votes.add(vote.get_id());
         }
         ConfigurationNode node;
@@ -137,11 +137,13 @@ public class MinePayApi implements IMinePayApi {
             }
             for (String request : requests) {
                 StoreRequest joinRequest = requestManager.getRequest(request);
-                EventManager.requestsOnline.add(joinRequest);
+                if (joinRequest == null) continue;
+                EventManager.requestsOnline.put(joinRequest.get_id(), joinRequest);
             }
             for (String vote : votes) {
                 Vote vote1 = requestManager.getVote(vote);
-                EventManager.votesOnline.add(vote1);
+                if (vote1 == null) continue;
+                EventManager.votesOnline.put(vote1.get_id(), vote1);
             }
             saves.delete();
         } catch (ConfigurateException e) {
