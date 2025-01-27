@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dk.minepay:api-bukkit:0.0.3")
+    implementation("dk.minepay:api-bukkit:0.0.4")
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") {
         exclude(group = "net.md-5", module = "bungeecord-chat")
     }
