@@ -22,7 +22,7 @@ subprojects {
         }
         kotlinGradle {
             endWithNewline()
-            indentWithSpaces(4)
+            leadingTabsToSpaces(4)
             trimTrailingWhitespace()
         }
         yaml {
