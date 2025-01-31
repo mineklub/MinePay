@@ -2,7 +2,7 @@
 shadow = "8.3.5"
 spotless = "7.0.2"
 okhttp = "3.14.9"
-gson = "2.11.0"
+gson = "2.12.1"
 spigot = "1.8.8-R0.1-SNAPSHOT"
 socketclient = "2.1.1"
 lombok = "1.18.36"
