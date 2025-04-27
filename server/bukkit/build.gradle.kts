@@ -4,8 +4,8 @@ import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 plugins {
     id("java-library")
     alias(libs.plugins.shadow)
-    id("xyz.jpenilla.resource-factory-paper-convention") version "1.2.0"
-    id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.0"
+    id("xyz.jpenilla.resource-factory-paper-convention") version "1.2.1"
+    id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.1"
 }
 
 repositories {
