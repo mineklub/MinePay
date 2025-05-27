@@ -1,6 +1,6 @@
 [versions]
 shadow = "8.3.6"
-spotless = "7.0.3"
+spotless = "7.0.4"
 okhttp = "3.14.9"
 gson = "2.13.1"
 spigot = "1.8.8-R0.1-SNAPSHOT"
