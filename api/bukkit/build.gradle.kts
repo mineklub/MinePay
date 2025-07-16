@@ -6,7 +6,7 @@ import com.vanniktech.maven.publish.JavadocJar
 plugins {
     id("java-library")
     alias(libs.plugins.shadow)
-    id("com.vanniktech.maven.publish") version "0.33.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
     signing
 }
 
