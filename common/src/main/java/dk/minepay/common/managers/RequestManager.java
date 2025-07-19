@@ -24,7 +24,11 @@ public class RequestManager {
     private final String voteUrl = "https://api.mineclub.dk/v1/plugin/vote/";
     private final IMinePayApi MinePayApi;
 
-    /** Constructor for the RequestManager class. */
+    /**
+     * Constructor for RequestManager that initializes the MinePayApi instance.
+     *
+     * @param MinePayApi the IMinePayApi instance to use for API interactions
+     */
     public RequestManager(IMinePayApi MinePayApi) {
         this.MinePayApi = MinePayApi;
     }
