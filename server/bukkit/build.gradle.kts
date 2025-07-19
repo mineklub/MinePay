@@ -18,6 +18,8 @@ repositories {
 dependencies {
     implementation(project(":common"))
     implementation(project(":api-bukkit"))
+    implementation(project(":hook-skript-2_10"))
+    implementation(project(":hook-skript-2_9"))
     compileOnly(libs.skript)
     compileOnly(libs.spigot) {
         exclude(group = "net.md-5", module = "bungeecord-chat")
@@ -25,6 +27,7 @@ dependencies {
         exclude(group = "com.google.code.gson", module = "gson")
         exclude(group = "org.yaml", module = "snakeyaml")
         exclude(group = "junit", module = "junit")
+        exclude(group ="commons-lang", module = "commons-lang")
     }
     compileOnly(libs.lombok)
     implementation(libs.gson)

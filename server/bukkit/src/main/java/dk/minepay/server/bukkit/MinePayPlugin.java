@@ -1,9 +1,11 @@
 package dk.minepay.server.bukkit;
 
+import ch.njol.skript.Skript;
 import dk.minepay.api.bukkit.MinePayApi;
-import dk.minepay.server.bukkit.hooks.skript.SkriptHook;
+import dk.minepay.hooks.skript2_9.SkriptHook;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -29,7 +31,10 @@ public class MinePayPlugin extends JavaPlugin {
 
     /** Initializes the Skript hook if the Skript plugin is available. */
     public void initSkriptHook() {
-        if (Bukkit.getPluginManager().getPlugin("Skript") != null) {
+        Plugin skriptPlugin = Bukkit.getPluginManager().getPlugin("Skript");
+        if (skriptPlugin != null) {
+            Skript skript = (Skript) skriptPlugin;
+            // Check skript version
             new SkriptHook().init();
         }
     }
