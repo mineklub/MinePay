@@ -2,7 +2,7 @@ package dk.minepay.server.bukkit;
 
 import ch.njol.skript.Skript;
 import dk.minepay.api.bukkit.MinePayApi;
-import dk.minepay.hooks.skript2_9.SkriptHook;
+import dk.minepay.hooks.skript.SkriptHook;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

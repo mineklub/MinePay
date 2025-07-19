@@ -1,4 +1,4 @@
-package dk.minepay.hooks.skript2_10;
+package dk.minepay.hooks.skript;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
@@ -25,9 +25,9 @@ public class SkriptHook implements iHook {
 
         addon = Skript.registerAddon(MinePayApi.getINSTANCE().getPlugin());
         try {
-            addon.loadClasses("dk.minepay.hooks", "skript");
-            if (addon.version.isLargerThan(new Version(2, 10))
-                    || addon.version.equals(new Version(2, 10))) {
+            addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript");
+            if (addon.version.isLargerThan(new Version(2, 6))
+                    || addon.version.equals(new Version(2, 6))) {
                 addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript.new");
             } else {
                 addon.loadClasses("dk.minepay.server.bukkit.hooks", "skript.old");

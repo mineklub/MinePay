@@ -18,8 +18,7 @@ repositories {
 dependencies {
     implementation(project(":common"))
     implementation(project(":api-bukkit"))
-    implementation(project(":hook-skript-2_10"))
-    implementation(project(":hook-skript-2_9"))
+    implementation(project(":hook-skript"))
     compileOnly(libs.skript)
     compileOnly(libs.spigot) {
         exclude(group = "net.md-5", module = "bungeecord-chat")
