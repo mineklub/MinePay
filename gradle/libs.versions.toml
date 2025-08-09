@@ -1,5 +1,5 @@
 [versions]
-shadow = "9.0.0"
+shadow = "9.0.1"
 spotless = "7.2.1"
 okhttp = "3.14.9"
 gson = "2.13.1"
