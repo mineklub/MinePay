@@ -1,7 +1,7 @@
 [versions]
 shadow = "9.2.2"
-spotless = "8.0.0"
-okhttp = "5.3.0"
+spotless = "8.1.0"
+okhttp = "5.3.2"
 gson = "2.13.2"
 spigot = "1.8.8-R0.1-SNAPSHOT"
 socketclient = "2.1.2"
