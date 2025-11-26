@@ -1,7 +1,4 @@
-<a id="readme-top"></a>
-
 <h1 align="center">
-  <br>
   <a href="https://github.com/mineklub/MinePay/releases"><img src="./.github/MineClub_background_1920x1080.png" alt="MineClub Logo"></a>
 </h1>
 
