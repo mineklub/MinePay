@@ -22,7 +22,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew shadowJar --full-stacktrace
       - name: Upload Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: Artifacts
           path: plugin/build/libs/MinePay.jar
